@@ -24,13 +24,13 @@ export const toast = style({
 });
 
 export const successToast = style({
-  backgroundColor: vars.color.green10,
-  border: `1px solid ${vars.color.green30}`,
-  color: vars.color.green90,
+  backgroundColor: vars.color.primary5,
+  border: `1px solid ${vars.color.primary10}`,
+  color: vars.color.primary50,
 });
 
 export const errorToast = style({
-  backgroundColor: vars.color.red10,
+  backgroundColor: vars.color.primary5,
   border: `1px solid ${vars.color.red30}`,
   color: vars.color.red90,
 });

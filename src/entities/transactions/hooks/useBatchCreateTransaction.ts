@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  createTransaction,
   type CreateTxArgs,
+  createTransaction,
 } from '@/shared/apis/transaction';
 import { useOfflineSync } from '@/shared/lib/offline/useOfflineSync';
 import {
@@ -123,7 +123,14 @@ export const useBatchCreateTransaction = ({
           }))
         );
       } else {
-        onSuccess?.(data.results);
+        onSuccess?.(
+          data.results as Array<{
+            success: boolean;
+            transaction: CreateTxArgs;
+            data: string | undefined;
+            error: any;
+          }>
+        );
       }
     },
   });

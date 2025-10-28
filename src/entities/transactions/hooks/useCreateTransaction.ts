@@ -4,10 +4,7 @@ import {
   createTransaction,
 } from '@/shared/apis/transaction';
 import { useOfflineSync } from '@/shared/lib/offline/useOfflineSync';
-import {
-  invalidateTransactionQueries,
-  transactionKeys,
-} from '../lib/queryKeys';
+import { transactionKeys } from '../lib/queryKeys';
 
 interface UseCreateTransactionOptions {
   ledgerId: string;

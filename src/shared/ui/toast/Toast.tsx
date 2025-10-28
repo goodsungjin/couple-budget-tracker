@@ -60,12 +60,12 @@ const Toast = ({ id, type, message, duration = 3000, onClose }: ToastProps) => {
       }}
     >
       <div className={css.toastIcon}>
-        <Text typography="body2" color="inherit">
+        <Text typography="body2" color="gray100">
           {getIcon()}
         </Text>
       </div>
       <div className={css.toastContent}>
-        <Text typography="body2" color="inherit">
+        <Text typography="body2" color="gray100">
           {message}
         </Text>
       </div>
@@ -78,7 +78,7 @@ const Toast = ({ id, type, message, duration = 3000, onClose }: ToastProps) => {
         }}
         aria-label="닫기"
       >
-        <Text typography="body2" color="inherit">
+        <Text typography="body2" color="gray100">
           ×
         </Text>
       </button>

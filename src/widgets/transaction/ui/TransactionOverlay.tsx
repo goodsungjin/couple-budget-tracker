@@ -1,6 +1,4 @@
-import { useQueryClient } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
-import { getListCategoriesQueryOptions } from '@/entities/category/apis/getListCategoriesQueryOptions';
+import { useState } from 'react';
 import { InputAmount } from '@/features/transaction/ui/InputAmount';
 import { InputCategory } from '@/features/transaction/ui/InputCategory';
 import { InputDate } from '@/features/transaction/ui/InputDate';

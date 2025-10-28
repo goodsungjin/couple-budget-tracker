@@ -2,7 +2,6 @@ import { motion } from 'motion/react';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import { vars } from '@/shared/lib/vanilla-extract';
-import { BoxButton } from '@/shared/ui/button/BoxButton';
 import { Dialog } from '@/shared/ui/dialog/Dialog';
 import { Flex } from '@/shared/ui/flex/Flex';
 import { Text } from '@/shared/ui/text/Text';
@@ -70,15 +69,15 @@ const PageSettings = ({ close }: Props) => {
 
         <Flex className={css.body} direction="column" height="100%" flex={1}>
           {selectedSideItem === 'DEFAULT' && (
-            <DefaultManagement ledgerId={ledgerId} />
+            <DefaultManagement ledgerId={ledgerId || ''} />
           )}
 
           {selectedSideItem === 'CATEGORY' && (
-            <CategoryManagement ledgerId={ledgerId} />
+            <CategoryManagement ledgerId={ledgerId || ''} />
           )}
 
           {selectedSideItem === 'PAYMENT_METHOD' && (
-            <PaymentMethod ledgerId={ledgerId} />
+            <PaymentMethod ledgerId={ledgerId || ''} />
           )}
         </Flex>
       </Flex>

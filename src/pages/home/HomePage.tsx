@@ -1,6 +1,4 @@
-import { PageSettings } from '@/pages/settings/PageSettings';
 import { Flex } from '@/shared/ui/flex/Flex';
-import { TransitionRenderer } from '@/shared/ui/transition/TransitionRenderer';
 
 const HomePage = () => {
   return (

@@ -13,7 +13,6 @@ import { OfflineIndicator } from '@/shared/ui/offline-indicator/OfflineIndicator
 import { useToast } from '@/shared/ui/toast/ToastProvider';
 import { TransitionRenderer } from '@/shared/ui/transition/TransitionRenderer';
 import { BatchTransactionOverlay } from '@/widgets/transaction/ui/BatchTransactionOverlay';
-import { TransactionCalendarView } from '@/widgets/transaction/ui/TransactionCalendarView';
 import { TransactionListView } from '@/widgets/transaction/ui/TransactionListView';
 import { TransactionOverlay } from '@/widgets/transaction/ui/TransactionOverlay';
 import * as css from './TransactionPage.css';
@@ -44,7 +43,7 @@ const TransactionPage = ({ ledgerId }: Props) => {
       calendarData.days[calendarData.days.length - 1].date
     ),
   });
-  const { mutate: mutateCreateTransaction, isPending } = useCreateTransaction({
+  const { mutate: mutateCreateTransaction } = useCreateTransaction({
     ledgerId,
     onSuccess: () => {
       setIsOpen(false);

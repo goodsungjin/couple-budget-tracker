@@ -3,7 +3,6 @@ import { motion } from 'motion/react';
 import { useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router';
 import { PageSettings } from '@/pages/settings/PageSettings';
-import { Float } from '@/shared/ui/float/Float';
 import { TransitionRenderer } from '@/shared/ui/transition/TransitionRenderer';
 import { getLedgerMembersQueryOptions } from '../../../entities/ledger/apis/getLedgerMembersQueryOptions';
 import { vars } from '../../lib/vanilla-extract';

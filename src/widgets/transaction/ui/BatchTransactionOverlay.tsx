@@ -140,16 +140,14 @@ const BatchTransactionOverlay = ({ ledgerId, isOpen, onClose }: Props) => {
             배치 거래 내역 추가
           </Text>
 
-          <Flex direction="column" gap="x4" flex={1} overflow="auto">
+          <Flex direction="column" gap="x4" flex={1}>
             {transactions.map((transaction, index) => (
               <Flex
                 key={`transaction-${index}-${transaction.title}-${transaction.amount}`}
                 direction="column"
                 gap="x3"
-                p="x4"
-                style={{ border: '1px solid #e0e0e0', borderRadius: '8px' }}
               >
-                <Flex justifyContent="space-between" alignItems="center">
+                <Flex justifyContent="between" alignItems="center">
                   <Text typography="body1" color="gray90">
                     거래 {index + 1}
                   </Text>
@@ -212,7 +210,7 @@ const BatchTransactionOverlay = ({ ledgerId, isOpen, onClose }: Props) => {
                       ref={ref}
                       value={transaction.category}
                       onChange={(category) =>
-                        updateTransaction(index, 'category', category)
+                        updateTransaction(index, 'category', category.id)
                       }
                     />
                   )}

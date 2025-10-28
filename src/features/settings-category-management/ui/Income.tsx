@@ -10,7 +10,7 @@ interface Props {
 }
 const Income = ({ ledgerId, onAddCategory }: Props) => {
   const { data: categories } = useQuery(
-    getListCategoriesQueryOptions(ledgerId, { flowType: 'income' })
+    getListCategoriesQueryOptions({ ledgerId, flowType: 'income' })
   );
 
   return (
