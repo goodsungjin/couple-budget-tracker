@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useOutletContext } from 'react-router';
 import { getMonthKPIQueryOptions } from '@/entities/dashboard/api/getMonthKPIQueryOptions';
 import { useCalendar } from '@/features/calendar/model/useCalendar';
 import { vars } from '@/shared/lib/vanilla-extract';
@@ -8,11 +9,8 @@ import { IconChevronRight } from '@/shared/ui/icon/IconChevronRight';
 import { Text } from '@/shared/ui/text/Text';
 import * as css from './DashboardPage.css';
 
-interface Props {
-  ledgerId: string;
-}
-
-const DashboardPage = ({ ledgerId }: Props) => {
+const DashboardPage = () => {
+  const { ledgerId } = useOutletContext<{ ledgerId: string }>();
   const { state, navigatePrevious, navigateNext } = useCalendar();
   const { data: monthKPI } = useQuery({
     ...getMonthKPIQueryOptions(
@@ -86,26 +84,26 @@ const DashboardPage = ({ ledgerId }: Props) => {
           지출 증감률 :
         </Text>
         <Text typography="h2" color="gray90">
-          {monthKPI?.expense_rate.toLocaleString()}
+          {monthKPI?.expense_rate?.toLocaleString()}
         </Text>
 
         <Text typography="h2" color="gray90">
           절약 증감률 :
         </Text>
         <Text typography="h2" color="gray90">
-          {monthKPI?.saving_rate.toLocaleString()}
+          {monthKPI?.saving_rate?.toLocaleString()}
         </Text>
       </Flex>
 
       <Flex direction="column" gap="x4">
         <Text typography="h2" color="gray90">
-          지난달보다 {monthKPI?.expense_delta.toLocaleString()} 더 사용했어요
+          지난달보다 {monthKPI?.expense_delta?.toLocaleString()} 더 사용했어요
         </Text>
         <Text typography="h2" color="gray90">
-          지난달보다 {monthKPI?.saving_delta.toLocaleString()} 더 절약했어요
+          지난달보다 {monthKPI?.saving_delta?.toLocaleString()} 더 절약했어요
         </Text>
         <Text typography="h2" color="gray90">
-          지난달보다 {monthKPI?.income_delta.toLocaleString()} 더 수입했어요
+          지난달보다 {monthKPI?.income_delta?.toLocaleString()} 더 수입했어요
         </Text>
       </Flex>
     </Flex>

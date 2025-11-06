@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import { Route, Routes, useNavigate, useParams } from 'react-router';
+import { Outlet, Route, Routes, useNavigate, useParams } from 'react-router';
 import { DashboardPage } from '@/pages/dashboard/DashboardPage';
 import { TransactionPage } from '@/pages/transaction/TransactionPage';
 import * as css from './App.css';
@@ -51,7 +51,9 @@ function App() {
           <Flex flex={1} className={css.body}>
             <SideMenu ledgerId={ledgerId || ''} />
 
-            <Routes>
+            <Outlet context={{ ledgerId }} />
+
+            {/* <Routes>
               <Route path="home" element={<HomePage />} />
 
               <Route
@@ -63,7 +65,7 @@ function App() {
                 path="dashboard"
                 element={<DashboardPage ledgerId={ledgerId || ''} />}
               />
-            </Routes>
+            </Routes> */}
           </Flex>
         </Flex>
       </ToastProvider>

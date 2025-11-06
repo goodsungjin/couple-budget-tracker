@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import { useOutletContext } from 'react-router';
 import { getListTransactionQueryOptions } from '@/entities/transactions/api/getListTransactionQueryOptions';
 import { useCreateTransaction } from '@/entities/transactions/hooks/useCreateTransaction';
 import { useCalendar } from '@/features/calendar/model/useCalendar';
@@ -17,10 +18,9 @@ import { TransactionListView } from '@/widgets/transaction/ui/TransactionListVie
 import { TransactionOverlay } from '@/widgets/transaction/ui/TransactionOverlay';
 import * as css from './TransactionPage.css';
 
-interface Props {
-  ledgerId: string;
-}
-const TransactionPage = ({ ledgerId }: Props) => {
+const TransactionPage = () => {
+  const { ledgerId } = useOutletContext<{ ledgerId: string }>();
+
   const [isOpen, setIsOpen] = useState(false);
   const [defaultTransactionInput, setDefaultTransactionInput] = useState<Omit<
     CreateTxArgs,
