@@ -1,11 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import { Outlet, Route, Routes, useNavigate, useParams } from 'react-router';
-import { DashboardPage } from '@/pages/dashboard/DashboardPage';
-import { TransactionPage } from '@/pages/transaction/TransactionPage';
+import { Outlet, useNavigate, useParams } from 'react-router';
 import * as css from './App.css';
 import { getLedgerListQueryOptions } from './entities/ledger/apis/getLedgerLitsQueryOptions';
-import { HomePage } from './pages/home/HomePage';
 import { ErrorBoundary } from './shared/ui/error-boundary/ErrorBoundary';
 import { Flex } from './shared/ui/flex/Flex';
 import { Header } from './shared/ui/header/Header';

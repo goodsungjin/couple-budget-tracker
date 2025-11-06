@@ -1,4 +1,4 @@
-import { createBrowserRouter, Route } from 'react-router';
+import { createBrowserRouter } from 'react-router';
 import App from '@/App';
 import LoginPage from '@/pages/auth/LoginPage';
 import { DashboardPage } from '@/pages/dashboard/DashboardPage';

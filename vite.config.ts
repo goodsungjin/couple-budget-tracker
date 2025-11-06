@@ -10,7 +10,10 @@ export default defineConfig({
     react(),
     vanillaExtractPlugin(),
     checker({
-      typescript: true,
+      typescript: {
+        tsconfigPath: './tsconfig.app.json',
+        root: './',
+      },
     }),
   ],
   envDir: '.',
