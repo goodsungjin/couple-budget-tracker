@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="함께 쓰는 가계부 아이콘">
+  <!-- Palette -->
+  <!-- Apricot: #FFBFA3, Cream: #FFF7EE, Graphite: #1F2937, Blue tab: #8FB5FF -->
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFC8B1"/>
+      <stop offset="100%" stop-color="#FFBFA3"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background (rounded square) representing a ledger/notebook cover -->
+  <rect x="7" y="8" rx="10" ry="10" width="42" height="48" fill="url(#g1)" stroke="#1F2937" stroke-width="3" />
+
+  <!-- Notebook spine -->
+  <rect x="12" y="8" width="4" height="48" fill="#1F2937" opacity="0.15"/>
+
+  <!-- Side tab -->
+  <rect x="49" y="26" width="10" height="16" rx="3" ry="3" fill="#8FB5FF" stroke="#1F2937" stroke-width="3"/>
+
+  <!-- Couple silhouettes (heads) -->
+  <circle cx="28" cy="28" r="5.5" fill="#FFF7EE" stroke="#1F2937" stroke-width="3"/>
+  <circle cx="38.5" cy="28" r="5.5" fill="#FFF7EE" stroke="#1F2937" stroke-width="3"/>
+
+  <!-- Shoulders / torso (single shared shape to imply 'together') -->
+  <path d="M21,42 C22.5,37 26.5,34.5 31,34.5 h5 c4.5,0 8.5,2.5 10,7.5 v3.5 H21 Z"
+        fill="#FFF7EE" stroke="#1F2937" stroke-width="3" stroke-linejoin="round"/>
+
+  <!-- Outer keyline for favicon visibility at small sizes -->
+  <rect x="6" y="7" rx="11" ry="11" width="54" height="50" fill="none" stroke="#1F2937" stroke-width="1" opacity="0.25"/>
+</svg>
