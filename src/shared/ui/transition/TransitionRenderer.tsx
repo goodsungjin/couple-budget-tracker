@@ -24,6 +24,8 @@ interface TransitionRendererProps {
   animate?: MotionNodeAnimationOptions['animate'];
   exit?: MotionNodeAnimationOptions['exit'];
   transition?: MotionNodeAnimationOptions['transition'];
+
+  zIndex?: number;
 }
 
 const TransitionRenderer = ({
@@ -36,6 +38,7 @@ const TransitionRenderer = ({
   animate,
   exit,
   transition,
+  zIndex,
 }: TransitionRendererProps) => {
   // 기본 애니메이션 설정
   const getDefaultAnimation = (
@@ -127,6 +130,7 @@ const TransitionRenderer = ({
           animate={finalAnimate}
           exit={finalExit}
           transition={finalTransition}
+          style={{ zIndex: zIndex ? zIndex : undefined }}
         >
           {children}
         </motion.div>

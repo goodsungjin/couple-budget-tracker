@@ -2,20 +2,20 @@ import { useQuery } from '@tanstack/react-query';
 import { motion } from 'motion/react';
 import { useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router';
-import { PageSettings } from '@/pages/settings/PageSettings';
 import { TransitionRenderer } from '@/shared/ui/transition/TransitionRenderer';
+import { LedgersSettings } from '@/widgets/ledgers-settings/ui/LedgersSettings';
 import { getLedgerMembersQueryOptions } from '../../../entities/ledger/apis/getLedgerMembersQueryOptions';
-import { vars } from '../../lib/vanilla-extract';
-import { Avatar } from '../avatar/Avatar';
-import { AvatarGroup } from '../avatar/AvatarGroup';
-import { Flex } from '../flex/Flex';
-import { CalendarIcon } from '../icon/CalendarIcon';
-import { MenuIcon } from '../icon/MenuIcon';
-import { PieChartIcon } from '../icon/PieChartIcon';
-import { SettingsIcon } from '../icon/SettingsIcon';
-import { Text } from '../text/Text';
-import * as css from './SideMenu.css';
-import { SideMenuItem } from './SideMenuItem';
+import { vars } from '../../../shared/lib/vanilla-extract';
+import { Avatar } from '../../../shared/ui/avatar/Avatar';
+import { AvatarGroup } from '../../../shared/ui/avatar/AvatarGroup';
+import { Flex } from '../../../shared/ui/flex/Flex';
+import { CalendarIcon } from '../../../shared/ui/icon/CalendarIcon';
+import { MenuIcon } from '../../../shared/ui/icon/MenuIcon';
+import { PieChartIcon } from '../../../shared/ui/icon/PieChartIcon';
+import { SettingsIcon } from '../../../shared/ui/icon/SettingsIcon';
+import { SideMenuItem } from '../../../shared/ui/side-menu/SideMenuItem';
+import { Text } from '../../../shared/ui/text/Text';
+import * as css from './LedgersSideMenu.css';
 
 const SIDE_MENU_ITEM_TYPES_LABELS: Record<SideMenuItemType, string> = {
   MENU: '내역',
@@ -43,7 +43,7 @@ interface Props {
   ledgerId: string;
 }
 
-const SideMenu = ({ ledgerId }: Props) => {
+const LedgersSideMenu = ({ ledgerId }: Props) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const { data: members } = useQuery(getLedgerMembersQueryOptions(ledgerId));
   const navigate = useNavigate();
@@ -104,11 +104,11 @@ const SideMenu = ({ ledgerId }: Props) => {
         </motion.div>
       </Flex>
 
-      <TransitionRenderer isOpen={isSettingsOpen}>
-        <PageSettings close={() => setSearchParams()} />
+      <TransitionRenderer isOpen={isSettingsOpen} zIndex={10}>
+        <LedgersSettings close={() => setSearchParams()} />
       </TransitionRenderer>
     </>
   );
 };
 
-export { SideMenu };
+export { LedgersSideMenu };

@@ -61,3 +61,14 @@ export async function acceptInviteForLedger(ledgerId: string) {
   if (error) throw error;
   return data;
 }
+
+export async function rejectInviteById(inviteId: string) {
+  const { data, error } = await supabase
+    .from('ledger_invites')
+    .update({ canceled_at: new Date().toISOString() })
+    .eq('id', inviteId)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}

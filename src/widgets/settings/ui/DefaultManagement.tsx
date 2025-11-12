@@ -1,4 +1,4 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { getUserProfileQueryOptions } from '@/entities/auth/apis/getUserProfileQueryOptions';
 import { getLedgerListQueryOptions } from '@/entities/ledger/apis/getLedgerLitsQueryOptions';
@@ -6,6 +6,12 @@ import { getLedgerMembersQueryOptions } from '@/entities/ledger/apis/getLedgerMe
 import { MemberItem } from '@/features/settings-default-management/ui/MemberItem';
 import { Section } from '@/features/settings-default-management/ui/Section';
 import { SubSection } from '@/features/settings-default-management/ui/SubSection';
+import {
+  createInviteByUserId,
+  findUserByEmailExact,
+} from '@/shared/apis/invites';
+import { removeMember } from '@/shared/apis/ledgers';
+import { queryClient } from '@/shared/lib/react-query/reactQuery';
 import { BoxButton } from '@/shared/ui/button/BoxButton';
 import { Flex } from '@/shared/ui/flex/Flex';
 import { TextField } from '@/shared/ui/input/TextField';
@@ -24,6 +30,36 @@ const DefaultManagement = ({ ledgerId }: Props) => {
   const ledgerMeta = ledgers.find((ledger) => ledger.id === ledgerId);
   const owners = ledgerMembers.find((member) => member.role === 'owner');
   const members = ledgerMembers.filter((member) => member.role !== 'owner');
+
+  const { mutate: mutateRemoveMember } = useMutation({
+    mutationFn: async (userId: string) => {
+      return removeMember(ledgerId, userId);
+    },
+    onSuccess: (_, userId) => {
+      queryClient.setQueriesData(
+        { queryKey: getLedgerMembersQueryOptions(ledgerId) },
+        (oldData: unknown) => {
+          if (!oldData || !Array.isArray(oldData)) return [];
+          return oldData.filter((member: any) => member.user_id !== userId);
+        }
+      );
+      // showToast('success', '멤버가 성공적으로 제거되었습니다.');
+    },
+    // onError: (error) => {
+    //   // showToast('error', '멤버 제거에 실패했습니다.');
+    // },
+  });
+
+  const { mutate: mutateInviteMember } = useMutation({
+    mutationFn: async (email: string) => {
+      const user = await findUserByEmailExact(email);
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      return createInviteByUserId(ledgerId, user.user_id);
+    },
+  });
 
   if (!ledgerMeta) {
     throw new Error('Ledger not found');
@@ -77,10 +113,25 @@ const DefaultManagement = ({ ledgerId }: Props) => {
                   displayName={member.display_name}
                   email={member.email}
                   isMe={member.user_id === userProfile.id}
-                  actionButton={{ text: '제거', onClick: () => {} }}
+                  actionButton={{
+                    text: '제거',
+                    onClick: () => {
+                      mutateRemoveMember(member.user_id);
+                    },
+                  }}
                 />
               ))}
             </Flex>
+
+            <BoxButton
+              size="xlarge"
+              variant="secondary"
+              onClick={() => {
+                mutateInviteMember('dkscofla3939@gmail.com');
+              }}
+            >
+              + 멤버 초대
+            </BoxButton>
           </SubSection>
         </Section>
       </Flex>

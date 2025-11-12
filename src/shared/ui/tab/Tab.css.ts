@@ -91,6 +91,7 @@ export const tabButton = recipe({
 export const tabPanel = style({
   padding: '16px 0',
   width: '100%',
+  overflow: 'hidden',
 });
 
 // Tab 패널 숨김/표시 스타일

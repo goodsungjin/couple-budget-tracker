@@ -15,13 +15,20 @@ interface Props {
 
 const InputCategory = forwardRef<
   {
-    onClick: () => void;
+    onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
   },
   Props
 >(({ onChange, value, flowType, ledgerId }, ref) => {
+  console.log('# flowType', {
+    value,
+    flowType,
+    ledgerId,
+  });
+
   const { data: categories } = useQuery(
     getListCategoriesQueryOptions({ ledgerId, flowType })
   );
+
   const inputRef = useRef<HTMLSelectElement>(null);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -32,6 +39,7 @@ const InputCategory = forwardRef<
   };
 
   const handleDisplayClick = () => {
+    inputRef.current?.focus();
     inputRef.current?.click?.();
     inputRef.current?.showPicker?.();
   };

@@ -13,7 +13,7 @@ const LoginPage = () => {
       gap="x6"
     >
       <Text typography="h1Bold" color="gray90">
-        커플 가계부에 오신 것을 환영합니다
+        함께 쓰는 가계부에 오신 것을 환영합니다
       </Text>
       <Text typography="body1" color="gray60">
         Google 계정으로 로그인하여 시작하세요

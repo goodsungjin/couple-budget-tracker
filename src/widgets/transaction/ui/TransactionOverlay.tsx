@@ -4,34 +4,34 @@ import { InputCategory } from '@/features/transaction/ui/InputCategory';
 import { InputDate } from '@/features/transaction/ui/InputDate';
 import { RadioGroupCategory } from '@/features/transaction/ui/RadioGroupCategory';
 import { TransactionLabel } from '@/features/transaction/ui/TransactionLabel';
-import type { CreateTxArgs } from '@/shared/apis/transaction';
 import { BoxButton } from '@/shared/ui/button/BoxButton';
 import { Dialog } from '@/shared/ui/dialog/Dialog';
 import { Flex } from '@/shared/ui/flex/Flex';
 import { Text } from '@/shared/ui/text/Text';
+import type { TransactionInput } from '@/widgets/transaction/model/type';
 
 interface Props {
   ledgerId: string;
-  onSubmit: (transaction: Omit<CreateTxArgs, 'p_ledger_id'>) => void;
+  onSubmit: (transaction: TransactionInput) => void;
   onClose: () => void;
-  defaultTransactionInput: Omit<CreateTxArgs, 'p_ledger_id'> | null;
+  defaultTransactionInput: TransactionInput | null;
+  onDelete: (id: string) => void;
 }
 const TransactionOverlay = ({
   ledgerId,
   onSubmit,
   onClose,
   defaultTransactionInput,
+  onDelete,
 }: Props) => {
-  const [transactionInput, setTransactionInput] = useState<
-    Omit<CreateTxArgs, 'p_ledger_id'>
-  >(
+  const [transactionInput, setTransactionInput] = useState<TransactionInput>(
     defaultTransactionInput ?? {
-      p_amount: 0,
-      p_category_id: '',
-      p_occurred_on: '',
-      p_memo: '',
-      p_merchant: '',
-      p_flow_type: 'expense',
+      amount: 0,
+      categoryId: '',
+      date: '',
+      memo: '',
+      title: '',
+      flowType: 'expense',
     }
   );
   const [displayCategoryName, setDisplayCategoryName] = useState<string>('');
@@ -51,39 +51,39 @@ const TransactionOverlay = ({
         </Text>
 
         <InputAmount
-          amount={transactionInput.p_amount}
+          amount={transactionInput.amount}
           onChange={(amount) =>
             setTransactionInput((prev) => ({
               ...prev,
-              p_amount: amount,
+              amount,
             }))
           }
         />
 
         <RadioGroupCategory
-          selectedFlowType={transactionInput.p_flow_type ?? 'expense'}
+          selectedFlowType={transactionInput.flowType ?? 'expense'}
           onChange={(flowType) =>
             setTransactionInput((prev) => ({
               ...prev,
-              p_flow_type: flowType,
+              flowType,
             }))
           }
         />
 
         <TransactionLabel
           label="날짜"
-          value={transactionInput.p_occurred_on}
+          value={transactionInput.date}
           placeholder="날짜를 선택하세요"
           readonly
           onChange={() => {}}
           renderInput={(ref) => (
             <InputDate
               ref={ref}
-              selectedDate={transactionInput.p_occurred_on}
-              onChange={(occurred_on) =>
+              selectedDate={transactionInput.date}
+              onChange={(date) =>
                 setTransactionInput((prev) => ({
                   ...prev,
-                  p_occurred_on: occurred_on,
+                  date,
                 }))
               }
             />
@@ -98,13 +98,13 @@ const TransactionOverlay = ({
           renderInput={(ref) => (
             <InputCategory
               ledgerId={ledgerId}
-              flowType={transactionInput.p_flow_type ?? 'expense'}
+              flowType={transactionInput.flowType ?? 'expense'}
               ref={ref}
-              value={transactionInput.p_category_id}
+              value={transactionInput.categoryId}
               onChange={({ id, name }) => {
                 setTransactionInput((prev) => ({
                   ...prev,
-                  p_category_id: id,
+                  categoryId: id,
                 }));
                 setDisplayCategoryName(name);
               }}
@@ -114,40 +114,40 @@ const TransactionOverlay = ({
 
         <TransactionLabel
           label="거래처"
-          value={transactionInput.p_merchant ?? ''}
+          value={transactionInput.title ?? ''}
           placeholder="거래처 이름을 입력하세요"
-          onChange={(merchant) =>
+          onChange={(title) =>
             setTransactionInput((prev) => ({
               ...prev,
-              p_merchant: merchant,
+              title,
             }))
           }
         />
 
         <TransactionLabel
           label="메모"
-          value={transactionInput.p_memo ?? ''}
+          value={transactionInput.memo ?? ''}
           placeholder="메모를 입력하세요"
           onChange={(memo) =>
             setTransactionInput((prev) => ({
               ...prev,
-              p_memo: memo,
+              memo,
             }))
           }
         />
 
         <TransactionLabel
           label="거래 수단"
-          value={transactionInput.p_payment_method_id ?? ''}
+          value={transactionInput.paymentMethodId ?? ''}
           placeholder="거래 수단을 선택하세요"
           onChange={() => {}}
           renderInput={() => (
             <InputDate
-              selectedDate={transactionInput.p_payment_method_id ?? ''}
-              onChange={(payment_method_id) =>
+              selectedDate={transactionInput.paymentMethodId ?? ''}
+              onChange={(paymentMethodId) =>
                 setTransactionInput((prev) => ({
                   ...prev,
-                  p_payment_method_id: payment_method_id,
+                  paymentMethodId,
                 }))
               }
             />
@@ -162,6 +162,16 @@ const TransactionOverlay = ({
           }}
         >
           저장하기
+        </BoxButton>
+
+        <BoxButton
+          variant="secondary"
+          size="xlarge"
+          onClick={() => {
+            onDelete(transactionInput.id ?? '');
+          }}
+        >
+          삭제하기
         </BoxButton>
       </Flex>
     </Dialog>

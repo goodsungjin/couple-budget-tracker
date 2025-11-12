@@ -8,8 +8,9 @@ import * as css from './TransactionListView.css';
 
 interface Props {
   transactions: ListTxResponse;
+  onClickTransaction: (id: string) => void;
 }
-const TransactionListView = ({ transactions }: Props) => {
+const TransactionListView = ({ transactions, onClickTransaction }: Props) => {
   const grouped = useMemo(() => {
     const res = transactions.reduce<{
       ids: string[];
@@ -44,6 +45,8 @@ const TransactionListView = ({ transactions }: Props) => {
             <Flex direction="column" gap="x2">
               {grouped.map[date].map((transaction) => (
                 <TransactionListItem
+                  categoryImoji={transaction.category_emoji}
+                  onClick={() => onClickTransaction(transaction.id)}
                   category={transaction.category_name}
                   key={transaction.id}
                   paymentMethod={transaction.payment_method_name}

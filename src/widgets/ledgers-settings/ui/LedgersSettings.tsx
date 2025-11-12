@@ -8,7 +8,7 @@ import { Text } from '@/shared/ui/text/Text';
 import { CategoryManagement } from '@/widgets/settings/ui/CategoryManagement';
 import { DefaultManagement } from '@/widgets/settings/ui/DefaultManagement';
 import { PaymentMethod } from '@/widgets/settings/ui/PaymentMethod';
-import * as css from './PageSettings.css';
+import * as css from './LedgersSettings.css';
 
 type SideItem = 'DEFAULT' | 'CATEGORY' | 'PAYMENT_METHOD' | 'SETTINGS';
 
@@ -28,14 +28,14 @@ const SIDE_ITEMS_LABELS: Record<SideItem, string> = {
 interface Props {
   close: () => void;
 }
-const PageSettings = ({ close }: Props) => {
+const LedgersSettings = ({ close }: Props) => {
   const { ledgerId } = useParams<{ ledgerId: string }>();
   const [selectedSideItem, setSelectedSideItem] = useState<SideItem>(
     SIDE_ITEMS[0]
   );
 
   return (
-    <Dialog onClickBackdrop={close}>
+    <Dialog onClickBackdrop={close} zIndex={10}>
       <Flex className={css.base}>
         <Flex
           className={css.side}
@@ -85,4 +85,4 @@ const PageSettings = ({ close }: Props) => {
   );
 };
 
-export { PageSettings };
+export { LedgersSettings };

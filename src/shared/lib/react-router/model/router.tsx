@@ -1,9 +1,9 @@
 import { createBrowserRouter } from 'react-router';
-import App from '@/App';
 import LoginPage from '@/pages/auth/LoginPage';
-import { DashboardPage } from '@/pages/dashboard/DashboardPage';
-import { HomePage } from '@/pages/home/HomePage';
-import { TransactionPage } from '@/pages/transaction/TransactionPage';
+import { DashboardPage } from '@/pages/ledgers/[ledger-id]/dashboard/DashboardPage';
+import { HomePage } from '@/pages/ledgers/[ledger-id]/home/HomePage';
+import PageLedgers from '@/pages/ledgers/[ledger-id]/PageLedgers';
+import { TransactionPage } from '@/pages/ledgers/[ledger-id]/transaction/TransactionPage';
 import { defaultLoader } from '@/shared/lib/react-router/model/NotAllowUrlLoader';
 
 export const browserRouter = createBrowserRouter([
@@ -18,7 +18,7 @@ export const browserRouter = createBrowserRouter([
   },
   {
     path: '/:ledgerId/*',
-    element: <App />,
+    element: <PageLedgers />,
     children: [
       {
         path: 'home',

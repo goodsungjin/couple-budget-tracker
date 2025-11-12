@@ -7,6 +7,7 @@ interface Props {
   className?: string;
   offsetX?: string;
   offsetY?: string;
+  zIndex?: number;
 }
 const Float = ({
   children,
@@ -15,6 +16,7 @@ const Float = ({
   className,
   offsetX,
   offsetY,
+  zIndex,
 }: Props & RecipeVariants<typeof css.base>) => {
   return (
     <div
@@ -22,6 +24,7 @@ const Float = ({
       style={{
         transform:
           offsetX && offsetY ? `translate(${offsetX}, ${offsetY})` : undefined,
+        zIndex: zIndex ? zIndex : undefined,
       }}
     >
       {children}

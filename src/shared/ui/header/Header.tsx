@@ -1,11 +1,16 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { getUserProfileQueryOptions } from '../../../entities/auth/apis/getUserProfileQueryOptions';
+import { getPendingInvitesQueryOptions } from '../../../entities/invites/apis/getPendingInvitesQueryOptions';
 import { getLedgerListQueryOptions } from '../../../entities/ledger/apis/getLedgerLitsQueryOptions';
+import { acceptInviteById, rejectInviteById } from '../../apis/invites';
 import { vars } from '../../lib/vanilla-extract';
+import { spacingScale } from '../../lib/vanilla-extract/space.css';
 import { Avatar } from '../avatar/Avatar';
+import { BoxButton } from '../button/BoxButton';
+import { Dialog } from '../dialog/Dialog';
 import { Flex } from '../flex/Flex';
 import { BellIcon } from '../icon/Bell';
 import { ChevronDown } from '../icon/ChevronDown';
@@ -18,16 +23,39 @@ interface Props {
 
 const Header = ({ ledgerId }: Props) => {
   const { data: profile } = useQuery(getUserProfileQueryOptions());
-
+  const { data: ledgers } = useQuery(getLedgerListQueryOptions());
+  const { data: pendingInvites } = useQuery(getPendingInvitesQueryOptions());
   const queryClient = useQueryClient();
-  const ledgers = queryClient.getQueryData(
-    getLedgerListQueryOptions().queryKey
-  );
+
   const currentLedger = ledgers?.find((ledger) => ledger.id === ledgerId);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const navigate = useNavigate();
+
+  const acceptMutation = useMutation({
+    mutationFn: acceptInviteById,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['invites', 'pending'] });
+      queryClient.invalidateQueries({ queryKey: ['ledger', 'list'] });
+    },
+  });
+
+  const rejectMutation = useMutation({
+    mutationFn: rejectInviteById,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['invites', 'pending'] });
+    },
+  });
+
+  const handleAcceptInvite = (inviteId: string) => {
+    acceptMutation.mutate(inviteId);
+  };
+
+  const handleRejectInvite = (inviteId: string) => {
+    rejectMutation.mutate(inviteId);
+  };
   // 외부 클릭 시 드롭다운 닫기
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -130,7 +158,14 @@ const Header = ({ ledgerId }: Props) => {
       </div>
 
       <Flex alignItems="center" gap="x6">
-        <BellIcon size={32} color={vars.color.gray90} />
+        <motion.div
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => setIsNotificationOpen(true)}
+          style={{ cursor: 'pointer' }}
+        >
+          <BellIcon size={32} color={vars.color.gray90} />
+        </motion.div>
 
         <Avatar
           size="large"
@@ -139,6 +174,102 @@ const Header = ({ ledgerId }: Props) => {
           fallback={profile?.display_name?.at(0) ?? ''}
         />
       </Flex>
+
+      <AnimatePresence>
+        {isNotificationOpen && (
+          <Dialog
+            onClickBackdrop={() => setIsNotificationOpen(false)}
+            zIndex={10}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.2 }}
+              style={{
+                backgroundColor: vars.color.gray0,
+                borderRadius: '16px',
+                padding: '24px',
+                minWidth: '400px',
+                maxWidth: '500px',
+                maxHeight: '600px',
+                overflow: 'auto',
+              }}
+            >
+              <Flex direction="column" gap="x4">
+                <Text typography="subHeading1Bold" color="gray100">
+                  알림
+                </Text>
+                {pendingInvites && pendingInvites.length > 0 ? (
+                  <Flex direction="column" gap="x2">
+                    {pendingInvites.map((invite) => (
+                      <motion.div
+                        key={invite.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        style={{
+                          padding: '16px',
+                          backgroundColor: vars.color.gray5,
+                          borderRadius: '8px',
+                          border: `1px solid ${vars.color.gray10}`,
+                        }}
+                      >
+                        <Flex direction="column" gap="x2">
+                          <Text typography="body1Bold" color="gray100">
+                            {invite.ledger_name}
+                          </Text>
+                          <Text typography="description" color="gray60">
+                            가계부 초대가 도착했습니다
+                          </Text>
+                          <div style={{ marginTop: spacingScale.x2 }}>
+                            <Flex gap="x2" justifyContent="end">
+                              <BoxButton
+                                size="small"
+                                variant="secondary"
+                                style="outline"
+                                onClick={() => handleRejectInvite(invite.id)}
+                                disabled={
+                                  rejectMutation.isPending ||
+                                  acceptMutation.isPending
+                                }
+                              >
+                                거절
+                              </BoxButton>
+                              <BoxButton
+                                size="small"
+                                variant="primary"
+                                style="fill"
+                                onClick={() => handleAcceptInvite(invite.id)}
+                                disabled={
+                                  rejectMutation.isPending ||
+                                  acceptMutation.isPending
+                                }
+                              >
+                                수락
+                              </BoxButton>
+                            </Flex>
+                          </div>
+                        </Flex>
+                      </motion.div>
+                    ))}
+                  </Flex>
+                ) : (
+                  <Flex
+                    direction="column"
+                    alignItems="center"
+                    justifyContent="center"
+                    py="x8"
+                  >
+                    <Text typography="body1" color="gray60">
+                      알림이 없습니다
+                    </Text>
+                  </Flex>
+                )}
+              </Flex>
+            </motion.div>
+          </Dialog>
+        )}
+      </AnimatePresence>
     </Flex>
   );
 };

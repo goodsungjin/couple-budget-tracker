@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { AddCategory } from '@/features/settings-category-management/ui/AddCategory';
+import { Expense } from '@/features/settings-category-management/ui/Expense';
 import { Income } from '@/features/settings-category-management/ui/Income';
+import { Saving } from '@/features/settings-category-management/ui/Saving';
 import { Section } from '@/features/settings-default-management/ui/Section';
 import { Flex } from '@/shared/ui/flex/Flex';
 import { Tab } from '@/shared/ui/tab/Tab';
@@ -22,8 +24,9 @@ const CategoryManagement = ({ ledgerId }: Props) => {
 
   return (
     <Flex px="x10" py="x10" flex={1} className={css.base}>
-      <Section title="카테고리">
+      <Section title="카테고리" className={css.tabContainer}>
         <Tab
+          className={css.tabList}
           tabs={[
             {
               id: 'income',
@@ -35,12 +38,19 @@ const CategoryManagement = ({ ledgerId }: Props) => {
             {
               id: 'expense',
               label: '지출',
-              content: <div>지출</div>,
+              content: (
+                <Expense
+                  ledgerId={ledgerId}
+                  onAddCategory={handleAddCategory}
+                />
+              ),
             },
             {
               id: 'transfer',
               label: '이체',
-              content: <div>이체</div>,
+              content: (
+                <Saving ledgerId={ledgerId} onAddCategory={handleAddCategory} />
+              ),
             },
           ]}
           defaultActiveTab="income"

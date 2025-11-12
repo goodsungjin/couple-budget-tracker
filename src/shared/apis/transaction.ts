@@ -12,7 +12,7 @@ export async function createTransaction(args: CreateTxArgs) {
   return data;
 }
 
-type UpdateTxArgs =
+export type UpdateTxArgs =
   Database['public']['Functions']['update_transaction']['Args'];
 export async function updateTransaction(args: UpdateTxArgs) {
   const { error } = await supabase.rpc('update_transaction', args);

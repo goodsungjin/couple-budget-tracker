@@ -18,6 +18,7 @@ export const ul = style({
   display: 'flex',
   flexDirection: 'column',
   gap: '8px',
+  overflow: 'auto',
 });
 
 export const pencel = style({

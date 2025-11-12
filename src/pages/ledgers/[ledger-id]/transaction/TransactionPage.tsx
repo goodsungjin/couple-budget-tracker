@@ -2,17 +2,21 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useOutletContext } from 'react-router';
 import { getListTransactionQueryOptions } from '@/entities/transactions/api/getListTransactionQueryOptions';
-import { useCreateTransaction } from '@/entities/transactions/hooks/useCreateTransaction';
+import {
+  useCreateTransaction,
+  useDeleteTransaction,
+  useUpdateTransaction,
+} from '@/entities/transactions/hooks/useCreateTransaction';
 import { useCalendar } from '@/features/calendar/model/useCalendar';
 import { TransactionCalendarDays } from '@/features/transaction-calendar/ui/TransactionCalendarDays';
 import { TransactionCalendarMonthNavigator } from '@/features/transaction-calendar/ui/TransactionCalendarMonthNavigator';
 import { TransactionCreationFAB } from '@/features/transaction-creation/ui/TransactionCreationFAB';
-import type { CreateTxArgs } from '@/shared/apis/transaction';
 import { Flex } from '@/shared/ui/flex/Flex';
 import { Float } from '@/shared/ui/float/Float';
 import { OfflineIndicator } from '@/shared/ui/offline-indicator/OfflineIndicator';
 import { useToast } from '@/shared/ui/toast/ToastProvider';
 import { TransitionRenderer } from '@/shared/ui/transition/TransitionRenderer';
+import type { TransactionInput } from '@/widgets/transaction/model/type';
 import { BatchTransactionOverlay } from '@/widgets/transaction/ui/BatchTransactionOverlay';
 import { TransactionListView } from '@/widgets/transaction/ui/TransactionListView';
 import { TransactionOverlay } from '@/widgets/transaction/ui/TransactionOverlay';
@@ -22,10 +26,8 @@ const TransactionPage = () => {
   const { ledgerId } = useOutletContext<{ ledgerId: string }>();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [defaultTransactionInput, setDefaultTransactionInput] = useState<Omit<
-    CreateTxArgs,
-    'p_ledger_id'
-  > | null>(null);
+  const [defaultTransactionInput, setDefaultTransactionInput] =
+    useState<TransactionInput | null>(null);
   const [isBatchOpen, setIsBatchOpen] = useState(false);
   const { showToast } = useToast();
 
@@ -54,6 +56,28 @@ const TransactionPage = () => {
       showToast('error', '거래 내역 추가에 실패했습니다. 다시 시도해주세요.');
     },
   });
+  const { mutate: mutateUpdateTransaction } = useUpdateTransaction({
+    ledgerId,
+    onSuccess: () => {
+      setIsOpen(false);
+      showToast('success', '거래 내역이 성공적으로 추가되었습니다!');
+    },
+    onError: (error) => {
+      console.error('Transaction 생성 실패:', error);
+      showToast('error', '거래 내역 추가에 실패했습니다. 다시 시도해주세요.');
+    },
+  });
+  const { mutate: mutateDeleteTransaction } = useDeleteTransaction({
+    ledgerId,
+    onSuccess: () => {
+      setIsOpen(false);
+      showToast('success', '거래 내역이 성공적으로 삭제되었습니다!');
+    },
+    onError: (error) => {
+      console.error('Transaction 삭제 실패:', error);
+      showToast('error', '거래 내역 삭제에 실패했습니다. 다시 시도해주세요.');
+    },
+  });
 
   return (
     <>
@@ -70,18 +94,37 @@ const TransactionPage = () => {
             transactions={transactions ?? []}
             onClickDay={(date) => {
               setDefaultTransactionInput(() => ({
-                p_ledger_id: ledgerId,
-                p_flow_type: 'expense',
-                p_occurred_on: date,
-                p_amount: 0,
-                p_category_id: '',
-                p_memo: '',
-                p_merchant: '',
+                date,
+                flowType: 'expense',
+                amount: 0,
+                categoryId: '',
+                memo: '',
+                title: '',
               }));
               setIsOpen(true);
             }}
           />
-          <TransactionListView transactions={transactions ?? []} />
+          <TransactionListView
+            transactions={transactions ?? []}
+            onClickTransaction={(id) => {
+              setIsOpen(true);
+
+              const transaction = transactions?.find((tx) => tx.id === id);
+
+              if (transaction) {
+                setDefaultTransactionInput({
+                  id: transaction.id,
+                  amount: transaction.amount,
+                  categoryId: transaction.category_id,
+                  flowType: transaction.flow_type,
+                  memo: transaction.memo,
+                  title: transaction.merchant,
+                  date: transaction.occurred_on,
+                  paymentMethodId: transaction.payment_method_id,
+                });
+              }
+            }}
+          />
         </Flex>
 
         <Float placement="bottom-right" offsetY="-60px" offsetX="-40px">
@@ -91,14 +134,37 @@ const TransactionPage = () => {
 
       <TransitionRenderer isOpen={isOpen} animationType="fade">
         <TransactionOverlay
-          defaultTransactionInput={defaultTransactionInput}
+          onDelete={(id) => {
+            mutateDeleteTransaction(id);
+          }}
+          defaultTransactionInput={defaultTransactionInput ?? null}
           onClose={() => setIsOpen(false)}
           ledgerId={ledgerId}
           onSubmit={(transaction) => {
-            mutateCreateTransaction({
-              ...transaction,
-              p_ledger_id: ledgerId,
-            });
+            if (transaction.id) {
+              mutateUpdateTransaction({
+                p_id: transaction.id,
+                p_amount: transaction.amount,
+                p_category_id: transaction.categoryId,
+                p_flow_type: transaction.flowType,
+                p_memo: transaction.memo,
+                p_merchant: transaction.title,
+                p_occurred_on: transaction.date,
+                p_payment_method_id: transaction.paymentMethodId,
+                // p_ledger_id: ledgerId,
+              });
+            } else {
+              mutateCreateTransaction({
+                p_amount: transaction.amount,
+                p_category_id: transaction.categoryId,
+                p_flow_type: transaction.flowType,
+                p_memo: transaction.memo,
+                p_merchant: transaction.title,
+                p_occurred_on: transaction.date,
+                p_payment_method_id: transaction.paymentMethodId,
+                p_ledger_id: ledgerId,
+              });
+            }
           }}
         />
       </TransitionRenderer>

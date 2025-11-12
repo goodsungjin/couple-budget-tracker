@@ -4,11 +4,12 @@ import * as css from './Dialog.css';
 interface Props {
   onClickBackdrop: () => void;
   children: React.ReactNode;
+  zIndex?: number;
 }
 
-const Dialog = ({ children, onClickBackdrop }: Props) => {
+const Dialog = ({ children, onClickBackdrop, zIndex }: Props) => {
   return (
-    <Float position="fixed" className={css.base}>
+    <Float position="fixed" className={css.base} zIndex={zIndex}>
       {
         /** biome-ignore lint/a11y/noStaticElementInteractions: <explanation> */
         // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>

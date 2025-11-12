@@ -2,6 +2,7 @@ import { style } from '@vanilla-extract/css';
 
 export const base = style({
   position: 'relative',
+  overflow: 'hidden',
 });
 
 export const slideContainer = style({
@@ -11,4 +12,12 @@ export const slideContainer = style({
   width: '100%',
   height: '100%',
   backgroundColor: 'white',
+});
+
+export const tabContainer = style({
+  overflow: 'hidden',
+});
+
+export const tabList = style({
+  overflow: 'hidden',
 });

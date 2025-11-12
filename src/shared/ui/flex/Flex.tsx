@@ -11,7 +11,7 @@ type Props = RecipeVariants<typeof css.base> & {
   flex?: number;
   height?: string;
   width?: string;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 };
 
 const Flex = ({

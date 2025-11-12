@@ -565,10 +565,7 @@ export type Database = {
       }
     }
     Functions: {
-      accept_ledger_invite: {
-        Args: { p_token: string }
-        Returns: string
-      }
+      accept_ledger_invite: { Args: { p_token: string }; Returns: string }
       accept_ledger_invite_by_id: {
         Args: { p_invite_id: string }
         Returns: string
@@ -577,41 +574,11 @@ export type Database = {
         Args: { p_ledger_id: string }
         Returns: string
       }
-      can_add_member: {
-        Args: { l: string }
-        Returns: boolean
-      }
-      can_edit_ledger: {
-        Args: { l: string; u: string }
-        Returns: boolean
-      }
+      can_add_member: { Args: { l: string }; Returns: boolean }
+      can_edit_ledger: { Args: { l: string; u: string }; Returns: boolean }
       can_edit_method: {
         Args: { p_method: string; u: string }
         Returns: boolean
-      }
-      citext: {
-        Args: { "": boolean } | { "": string } | { "": unknown }
-        Returns: string
-      }
-      citext_hash: {
-        Args: { "": string }
-        Returns: number
-      }
-      citextin: {
-        Args: { "": unknown }
-        Returns: string
-      }
-      citextout: {
-        Args: { "": string }
-        Returns: unknown
-      }
-      citextrecv: {
-        Args: { "": unknown }
-        Returns: string
-      }
-      citextsend: {
-        Args: { "": string }
-        Returns: string
       }
       create_ledger_from_purchase: {
         Args: { p_name?: string; p_purchase_id: string }
@@ -655,18 +622,9 @@ export type Database = {
         }
         Returns: string
       }
-      default_category_seed: {
-        Args: Record<PropertyKey, never>
-        Returns: Json
-      }
-      delete_transaction: {
-        Args: { p_id: string }
-        Returns: undefined
-      }
-      effective_member_cap: {
-        Args: { l: string }
-        Returns: number
-      }
+      default_category_seed: { Args: never; Returns: Json }
+      delete_transaction: { Args: { p_id: string }; Returns: undefined }
+      effective_member_cap: { Args: { l: string }; Returns: number }
       find_user_by_email_exact: {
         Args: { p_email: string }
         Returns: {
@@ -690,18 +648,12 @@ export type Database = {
         Args: { p_ledger_id: string; p_user_id: string }
         Returns: string
       }
-      is_member: {
-        Args: { l: string; u: string }
-        Returns: boolean
-      }
+      is_member: { Args: { l: string; u: string }; Returns: boolean }
       is_member_of_method: {
         Args: { p_method: string; u: string }
         Returns: boolean
       }
-      is_owner: {
-        Args: { l: string; u: string }
-        Returns: boolean
-      }
+      is_owner: { Args: { l: string; u: string }; Returns: boolean }
       list_payment_methods: {
         Args: { p_ledger_id: string }
         Returns: {
@@ -731,6 +683,7 @@ export type Database = {
         }
         Returns: {
           amount: number
+          category_emoji: string
           category_id: string
           category_name: string
           category_parent_id: string
@@ -749,18 +702,9 @@ export type Database = {
           signed_amount: number
         }[]
       }
-      max_regular_ledgers_for_user: {
-        Args: { u: string }
-        Returns: number
-      }
-      member_count_unrestricted: {
-        Args: { l: string }
-        Returns: number
-      }
-      method_ledger_id: {
-        Args: { p_method: string }
-        Returns: string
-      }
+      max_regular_ledgers_for_user: { Args: { u: string }; Returns: number }
+      member_count_unrestricted: { Args: { l: string }; Returns: number }
+      method_ledger_id: { Args: { p_method: string }; Returns: string }
       month_kpis: {
         Args: { p_ledger_id: string; p_month: number; p_year: number }
         Returns: {
@@ -780,7 +724,7 @@ export type Database = {
         }[]
       }
       my_pending_invites: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
           created_at: string
           expires_at: string
@@ -799,10 +743,7 @@ export type Database = {
         Args: { p_method_id: string; p_owner_user_ids: string[] }
         Returns: undefined
       }
-      share_any_ledger: {
-        Args: { a: string; b: string }
-        Returns: boolean
-      }
+      share_any_ledger: { Args: { a: string; b: string }; Returns: boolean }
       update_payment_method: {
         Args: {
           p_account_type?: string

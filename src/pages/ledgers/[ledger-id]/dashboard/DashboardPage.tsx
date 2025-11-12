@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useOutletContext } from 'react-router';
 import { getMonthKPIQueryOptions } from '@/entities/dashboard/api/getMonthKPIQueryOptions';
 import { useCalendar } from '@/features/calendar/model/useCalendar';
@@ -12,15 +12,13 @@ import * as css from './DashboardPage.css';
 const DashboardPage = () => {
   const { ledgerId } = useOutletContext<{ ledgerId: string }>();
   const { state, navigatePrevious, navigateNext } = useCalendar();
-  const { data: monthKPI } = useQuery({
-    ...getMonthKPIQueryOptions(
+  const { data: monthKPI } = useSuspenseQuery(
+    getMonthKPIQueryOptions(
       ledgerId,
       state.currentDate.month() + 1,
       state.currentDate.year()
-    ),
-  });
-
-  console.log('# monthKPI', monthKPI);
+    )
+  );
 
   return (
     <Flex

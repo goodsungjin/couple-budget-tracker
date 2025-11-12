@@ -10,7 +10,9 @@ interface Props {
   amount: number;
   createdBy: string;
   category: string;
+  categoryImoji: string;
   paymentMethod: string;
+  onClick: () => void;
 }
 
 const TransactionListItem = ({
@@ -20,6 +22,8 @@ const TransactionListItem = ({
   createdBy,
   category,
   paymentMethod,
+  categoryImoji,
+  onClick,
 }: Props) => {
   const tags = useMemo(() => {
     const result = [];
@@ -40,14 +44,21 @@ const TransactionListItem = ({
   }, [category, createdBy, paymentMethod]);
 
   return (
-    <Flex alignItems="center" justifyContent="between" gap="x4" py="x3" px="x2">
+    <Flex
+      alignItems="center"
+      justifyContent="between"
+      gap="x4"
+      py="x3"
+      px="x2"
+      onClick={onClick}
+    >
       <Flex alignItems="center" gap="x3" flex={1}>
         <Flex
           justifyContent="center"
           alignItems="center"
-          className={css.thumbnail}
+          className={css.thumbnail({ flowType })}
         >
-          {category?.slice?.(0, 2).toUpperCase()}
+          {categoryImoji}
         </Flex>
 
         <Flex direction="column" gap="x0_5">
