@@ -151,7 +151,7 @@ const TransactionPage = () => {
                 p_merchant: transaction.title,
                 p_occurred_on: transaction.date,
                 p_payment_method_id: transaction.paymentMethodId,
-                // p_ledger_id: ledgerId,
+                p_ledger_id: ledgerId,
               });
             } else {
               mutateCreateTransaction({

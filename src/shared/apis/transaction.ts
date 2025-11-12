@@ -7,7 +7,9 @@ export type CreateTxArgs =
   Database['public']['Functions']['create_transaction']['Args'];
 
 export async function createTransaction(args: CreateTxArgs) {
-  const { data, error } = await supabase.rpc('create_transaction', args);
+  const { data, error } = await supabase
+    .rpc('create_transaction', args)
+    .single();
   if (error) throw error;
   return data;
 }
@@ -15,8 +17,11 @@ export async function createTransaction(args: CreateTxArgs) {
 export type UpdateTxArgs =
   Database['public']['Functions']['update_transaction']['Args'];
 export async function updateTransaction(args: UpdateTxArgs) {
-  const { error } = await supabase.rpc('update_transaction', args);
+  const { data, error } = await supabase
+    .rpc('update_transaction', args)
+    .single();
   if (error) throw error;
+  return data;
 }
 
 type DeleteTxArgs =

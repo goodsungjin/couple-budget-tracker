@@ -620,7 +620,26 @@ export type Database = {
           p_occurred_on: string
           p_payment_method_id?: string
         }
-        Returns: string
+        Returns: {
+          amount: number
+          category_emoji: string
+          category_id: string
+          category_name: string
+          category_parent_id: string
+          category_parent_name: string
+          created_at: string
+          created_by: string
+          created_by_name: string
+          currency: string
+          flow_type: Database["public"]["Enums"]["flow_type_enum"]
+          id: string
+          memo: string
+          merchant: string
+          occurred_on: string
+          payment_method_id: string
+          payment_method_name: string
+          signed_amount: number
+        }[]
       }
       default_category_seed: { Args: never; Returns: Json }
       delete_transaction: { Args: { p_id: string }; Returns: undefined }
@@ -761,17 +780,37 @@ export type Database = {
       }
       update_transaction: {
         Args: {
-          p_amount?: number
-          p_category_id?: string
+          p_amount: number
+          p_category_id: string
           p_currency?: string
           p_flow_type?: Database["public"]["Enums"]["flow_type_enum"]
           p_id: string
+          p_ledger_id: string
           p_memo?: string
           p_merchant?: string
-          p_occurred_on?: string
+          p_occurred_on: string
           p_payment_method_id?: string
         }
-        Returns: undefined
+        Returns: {
+          amount: number
+          category_emoji: string
+          category_id: string
+          category_name: string
+          category_parent_id: string
+          category_parent_name: string
+          created_at: string
+          created_by: string
+          created_by_name: string
+          currency: string
+          flow_type: Database["public"]["Enums"]["flow_type_enum"]
+          id: string
+          memo: string
+          merchant: string
+          occurred_on: string
+          payment_method_id: string
+          payment_method_name: string
+          signed_amount: number
+        }[]
       }
     }
     Enums: {
