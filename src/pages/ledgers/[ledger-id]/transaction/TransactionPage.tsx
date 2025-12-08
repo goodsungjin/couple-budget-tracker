@@ -34,39 +34,14 @@ const TransactionPage = () => {
   const { showToast } = useToast();
 
   const { calendarData, navigatePrevious, navigateNext, state } = useCalendar();
+  console.log('# calendarData', calendarData);
   const { data: transactions } = useQuery({
-    // ...getListTransactionQueryOptions({
-    //   ledgerId,
-    //   from: calendarData.days[0].date.format('YYYY-MM-DD'),
-    //   to: calendarData.days[calendarData.days.length - 1].date.format(
-    //     'YYYY-MM-DD'
-    //   ),
-    // }),
-
-    queryKey: transactionKeys.list(
+    ...getListTransactionQueryOptions({
       ledgerId,
-      calendarData.days[0].date.format('YYYY-MM-DD'),
-      calendarData.days[calendarData.days.length - 1].date.format('YYYY-MM-DD')
-    ),
-    queryFn: () =>
-      listMonthActivityCompatible({
-        ledgerId,
-        from: calendarData.days[0].date.format('YYYY-MM-DD'),
-        to: calendarData.days[calendarData.days.length - 1].date.format(
-          'YYYY-MM-DD'
-        ),
-      }),
-    // ...getListTransactionQueryOptions({
-    //   ledgerId,
-    //   from: calendarData.days[0].date.format('YYYY-MM-DD'),
-    //   to: calendarData.days[calendarData.days.length - 1].date.format(
-    //     'YYYY-MM-DD'
-    //   ),
-    // }),
-    enabled: !!(
-      calendarData.days[0].date &&
-      calendarData.days[calendarData.days.length - 1].date
-    ),
+      from: calendarData.firstDay.format('YYYY-MM-DD'),
+      to: calendarData.lastDay.format('YYYY-MM-DD'),
+    }),
+    enabled: !!calendarData.firstDay && !!calendarData.lastDay,
   });
   const { mutate: mutateCreateTransaction } = useCreateTransaction({
     ledgerId,

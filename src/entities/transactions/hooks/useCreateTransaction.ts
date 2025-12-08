@@ -22,7 +22,6 @@ export const useCreateTransaction = ({
   const queryClient = useQueryClient();
   // const { isOnline, addToOfflineQueue } = useOfflineSync(ledgerId);
 
-  console.log('🔍 useCreateTransaction', ledgerId, onSuccess, onError);
   return useMutation({
     mutationFn: async (transaction: CreateTxArgs) => {
       // if (!isOnline) {
@@ -68,7 +67,6 @@ export const useUpdateTransaction = ({
   onSuccess,
 }: UseCreateTransactionOptions) => {
   const queryClient = useQueryClient();
-  console.log('🔍 useUpdateTransaction', ledgerId, onSuccess);
 
   return useMutation({
     mutationFn: async (newTransaction: UpdateTxArgs) => {
@@ -97,8 +95,6 @@ export const useDeleteTransaction = ({
   onError,
 }: UseCreateTransactionOptions) => {
   const queryClient = useQueryClient();
-
-  console.log('🔍 useDeleteTransaction', ledgerId, onSuccess, onError);
 
   return useMutation({
     mutationFn: async (id: string) => {

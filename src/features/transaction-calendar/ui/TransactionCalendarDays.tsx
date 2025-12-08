@@ -44,18 +44,13 @@ const TransactionCalendarDays = ({
     );
   }, [transactions]);
 
-  const weeks = useMemo(
-    () =>
-      calendarData.days.reduce((acc, day) => {
-        const week = day.date.week();
-        if (!acc[week]) {
-          acc[week] = [];
-        }
-        acc[week].push(day);
-        return acc;
-      }, [] as CalendarDay[][]),
-    [calendarData.days]
-  );
+  const weeks = useMemo(() => {
+    const result: CalendarDay[][] = [];
+    for (let i = 0; i < calendarData.days.length; i += 7) {
+      result.push(calendarData.days.slice(i, i + 7));
+    }
+    return result;
+  }, [calendarData.days]);
 
   return (
     <Flex className={css.base} direction="column" width="890px" height="680px">

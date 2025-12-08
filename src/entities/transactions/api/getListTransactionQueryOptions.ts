@@ -1,5 +1,5 @@
 import { queryOptions } from '@tanstack/react-query';
-import { listTransactions } from '@/shared/apis/transaction';
+import { listMonthActivityCompatible } from '@/shared/apis/recurringTransaction';
 import { transactionKeys } from '../lib/queryKeys';
 
 export const getListTransactionQueryOptions = ({
@@ -14,5 +14,5 @@ export const getListTransactionQueryOptions = ({
   queryOptions({
     queryKey: transactionKeys.list(ledgerId, from, to),
     queryFn: () =>
-      listTransactions({ p_ledger_id: ledgerId, p_from: from, p_to: to }),
+      listMonthActivityCompatible({ ledgerId, from: from, to: to }),
   });
