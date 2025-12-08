@@ -7,10 +7,12 @@ import {
   useDeleteTransaction,
   useUpdateTransaction,
 } from '@/entities/transactions/hooks/useCreateTransaction';
+import { transactionKeys } from '@/entities/transactions/lib/queryKeys';
 import { useCalendar } from '@/features/calendar/model/useCalendar';
 import { TransactionCalendarDays } from '@/features/transaction-calendar/ui/TransactionCalendarDays';
 import { TransactionCalendarMonthNavigator } from '@/features/transaction-calendar/ui/TransactionCalendarMonthNavigator';
 import { TransactionCreationFAB } from '@/features/transaction-creation/ui/TransactionCreationFAB';
+import { listMonthActivityCompatible } from '@/shared/apis/recurringTransaction';
 import { Flex } from '@/shared/ui/flex/Flex';
 import { Float } from '@/shared/ui/float/Float';
 import { OfflineIndicator } from '@/shared/ui/offline-indicator/OfflineIndicator';
@@ -33,13 +35,34 @@ const TransactionPage = () => {
 
   const { calendarData, navigatePrevious, navigateNext, state } = useCalendar();
   const { data: transactions } = useQuery({
-    ...getListTransactionQueryOptions({
+    // ...getListTransactionQueryOptions({
+    //   ledgerId,
+    //   from: calendarData.days[0].date.format('YYYY-MM-DD'),
+    //   to: calendarData.days[calendarData.days.length - 1].date.format(
+    //     'YYYY-MM-DD'
+    //   ),
+    // }),
+
+    queryKey: transactionKeys.list(
       ledgerId,
-      from: calendarData.days[0].date.format('YYYY-MM-DD'),
-      to: calendarData.days[calendarData.days.length - 1].date.format(
-        'YYYY-MM-DD'
-      ),
-    }),
+      calendarData.days[0].date.format('YYYY-MM-DD'),
+      calendarData.days[calendarData.days.length - 1].date.format('YYYY-MM-DD')
+    ),
+    queryFn: () =>
+      listMonthActivityCompatible({
+        ledgerId,
+        from: calendarData.days[0].date.format('YYYY-MM-DD'),
+        to: calendarData.days[calendarData.days.length - 1].date.format(
+          'YYYY-MM-DD'
+        ),
+      }),
+    // ...getListTransactionQueryOptions({
+    //   ledgerId,
+    //   from: calendarData.days[0].date.format('YYYY-MM-DD'),
+    //   to: calendarData.days[calendarData.days.length - 1].date.format(
+    //     'YYYY-MM-DD'
+    //   ),
+    // }),
     enabled: !!(
       calendarData.days[0].date &&
       calendarData.days[calendarData.days.length - 1].date

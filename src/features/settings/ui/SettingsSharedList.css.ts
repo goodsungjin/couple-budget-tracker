@@ -12,6 +12,7 @@ export const thumbnail = style({
   height: '44px',
   backgroundColor: vars.color.blue40,
   borderRadius: '50%',
+  fontSize: '20px',
 });
 
 export const ul = style({

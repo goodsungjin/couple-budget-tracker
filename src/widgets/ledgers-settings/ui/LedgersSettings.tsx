@@ -7,20 +7,28 @@ import { Flex } from '@/shared/ui/flex/Flex';
 import { Text } from '@/shared/ui/text/Text';
 import { CategoryManagement } from '@/widgets/settings/ui/CategoryManagement';
 import { DefaultManagement } from '@/widgets/settings/ui/DefaultManagement';
+import { FixedExpense } from '@/widgets/settings/ui/FixedExpense';
 import { PaymentMethod } from '@/widgets/settings/ui/PaymentMethod';
 import * as css from './LedgersSettings.css';
 
-type SideItem = 'DEFAULT' | 'CATEGORY' | 'PAYMENT_METHOD' | 'SETTINGS';
+type SideItem =
+  | 'DEFAULT'
+  | 'CATEGORY'
+  | 'FIXED_EXPENSE'
+  | 'PAYMENT_METHOD'
+  | 'SETTINGS';
 
 const SIDE_ITEMS: SideItem[] = [
   'DEFAULT',
   'CATEGORY',
+  'FIXED_EXPENSE',
   'PAYMENT_METHOD',
   'SETTINGS',
 ];
 const SIDE_ITEMS_LABELS: Record<SideItem, string> = {
   DEFAULT: '기본 설정',
   CATEGORY: '카테고리',
+  FIXED_EXPENSE: '고정 지출',
   PAYMENT_METHOD: '거래 수단',
   SETTINGS: '설정',
 };
@@ -74,6 +82,10 @@ const LedgersSettings = ({ close }: Props) => {
 
           {selectedSideItem === 'CATEGORY' && (
             <CategoryManagement ledgerId={ledgerId || ''} />
+          )}
+
+          {selectedSideItem === 'FIXED_EXPENSE' && (
+            <FixedExpense ledgerId={ledgerId || ''} />
           )}
 
           {selectedSideItem === 'PAYMENT_METHOD' && (

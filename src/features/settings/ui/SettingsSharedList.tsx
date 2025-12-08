@@ -6,7 +6,7 @@ import * as css from './SettingsSharedList.css';
 interface Item {
   id: string;
   label: string;
-  thumbnailUrl: string;
+  thumbnail?: React.ReactNode;
 }
 
 interface Props {
@@ -26,7 +26,13 @@ const SettingsSharedList = ({ list, onClick }: Props) => {
             justifyContent="between"
           >
             <Flex alignItems="center" gap="x2">
-              <div className={css.thumbnail} />
+              <Flex
+                className={css.thumbnail}
+                justifyContent="center"
+                alignItems="center"
+              >
+                {item.thumbnail}
+              </Flex>
 
               <Text typography="body1" color="gray60">
                 {item.label}

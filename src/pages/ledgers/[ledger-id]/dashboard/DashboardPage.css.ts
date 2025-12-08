@@ -44,3 +44,110 @@ export const day = recipe({
 });
 
 export const navigationButton = style([vars.reset.button]);
+
+export const chartContainer = style({
+  width: '100%',
+  maxWidth: '800px',
+  padding: '16px',
+});
+
+export const pieChartWrapper = style({
+  width: '100%',
+  minHeight: '300px',
+});
+
+export const barChartWrapper = style({
+  width: '100%',
+  minHeight: '300px',
+});
+
+export const kpiGrid = style({
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+  gap: '16px',
+  width: '100%',
+  maxWidth: '800px',
+  padding: '0 16px',
+});
+
+export const kpiCard = style({
+  padding: '20px',
+  borderRadius: '12px',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '8px',
+  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+});
+
+export const kpiLabel = style({
+  fontSize: '14px',
+  fontWeight: 500,
+});
+
+export const kpiValue = style({
+  fontSize: '24px',
+  fontWeight: 700,
+  lineHeight: '1.2',
+});
+
+export const deltaInfo = style({
+  marginTop: '4px',
+});
+
+export const rateChartContainer = style({
+  width: '100%',
+  maxWidth: '800px',
+  padding: '16px',
+});
+
+export const sectionTitle = style({
+  marginBottom: '16px',
+  fontSize: '18px',
+  fontWeight: 600,
+});
+
+export const rateChartWrapper = style({
+  width: '100%',
+  minHeight: '200px',
+  backgroundColor: vars.color.gray0,
+  borderRadius: '12px',
+  padding: '16px',
+  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+});
+
+export const comparisonContainer = style({
+  width: '100%',
+  maxWidth: '800px',
+  padding: '16px',
+});
+
+export const comparisonCards = style({
+  width: '100%',
+});
+
+export const comparisonCard = style({
+  padding: '16px',
+  borderRadius: '8px',
+  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+});
+
+export const kpiValueText = style({
+  fontSize: '24px',
+  fontWeight: 700,
+  lineHeight: '1.2',
+});
+
+export const deltaText = style({
+  fontSize: '14px',
+  fontWeight: 500,
+});
+
+export const comparisonValueText = style({
+  fontSize: '20px',
+  fontWeight: 700,
+  lineHeight: '1.2',
+});
+
+export const comparisonLabelText = style({
+  textAlign: 'right',
+});

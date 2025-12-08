@@ -428,6 +428,199 @@ export type Database = {
         }
         Relationships: []
       }
+      recurring_occurrences: {
+        Row: {
+          amount: number | null
+          auto_post_at: string | null
+          created_at: string
+          id: string
+          ledger_id: string
+          scheduled_on: string
+          series_id: string
+          status: Database["public"]["Enums"]["occurrence_status_enum"]
+          transaction_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount?: number | null
+          auto_post_at?: string | null
+          created_at?: string
+          id?: string
+          ledger_id: string
+          scheduled_on: string
+          series_id: string
+          status?: Database["public"]["Enums"]["occurrence_status_enum"]
+          transaction_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number | null
+          auto_post_at?: string | null
+          created_at?: string
+          id?: string
+          ledger_id?: string
+          scheduled_on?: string
+          series_id?: string
+          status?: Database["public"]["Enums"]["occurrence_status_enum"]
+          transaction_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recurring_occurrences_ledger_id_fkey"
+            columns: ["ledger_id"]
+            isOneToOne: false
+            referencedRelation: "ledgers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recurring_occurrences_series_id_fkey"
+            columns: ["series_id"]
+            isOneToOne: false
+            referencedRelation: "recurring_series"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recurring_occurrences_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recurring_occurrences_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "v_transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recurring_series: {
+        Row: {
+          amount: number
+          amount_max: number | null
+          amount_min: number | null
+          anchor_policy: Database["public"]["Enums"]["anchor_policy_enum"]
+          auto_materialize: boolean
+          auto_post: boolean
+          auto_post_at: string | null
+          auto_post_policy: string
+          backfill_post_mode: Database["public"]["Enums"]["backfill_post_mode_enum"]
+          by_monthday: number[] | null
+          category_id: string
+          created_at: string
+          created_by: string
+          currency: string
+          end_on: string | null
+          frequency: Database["public"]["Enums"]["recurring_frequency_enum"]
+          id: string
+          interval: number
+          is_active: boolean
+          ledger_id: string
+          materialize_cap_months: number
+          name: string
+          notes: string | null
+          payment_method_id: string | null
+          start_on: string
+          timezone: string
+          updated_at: string
+          window_end_offset_days: number
+          window_start_offset_days: number
+        }
+        Insert: {
+          amount: number
+          amount_max?: number | null
+          amount_min?: number | null
+          anchor_policy?: Database["public"]["Enums"]["anchor_policy_enum"]
+          auto_materialize?: boolean
+          auto_post?: boolean
+          auto_post_at?: string | null
+          auto_post_policy?: string
+          backfill_post_mode?: Database["public"]["Enums"]["backfill_post_mode_enum"]
+          by_monthday?: number[] | null
+          category_id: string
+          created_at?: string
+          created_by: string
+          currency?: string
+          end_on?: string | null
+          frequency?: Database["public"]["Enums"]["recurring_frequency_enum"]
+          id?: string
+          interval?: number
+          is_active?: boolean
+          ledger_id: string
+          materialize_cap_months?: number
+          name: string
+          notes?: string | null
+          payment_method_id?: string | null
+          start_on: string
+          timezone?: string
+          updated_at?: string
+          window_end_offset_days?: number
+          window_start_offset_days?: number
+        }
+        Update: {
+          amount?: number
+          amount_max?: number | null
+          amount_min?: number | null
+          anchor_policy?: Database["public"]["Enums"]["anchor_policy_enum"]
+          auto_materialize?: boolean
+          auto_post?: boolean
+          auto_post_at?: string | null
+          auto_post_policy?: string
+          backfill_post_mode?: Database["public"]["Enums"]["backfill_post_mode_enum"]
+          by_monthday?: number[] | null
+          category_id?: string
+          created_at?: string
+          created_by?: string
+          currency?: string
+          end_on?: string | null
+          frequency?: Database["public"]["Enums"]["recurring_frequency_enum"]
+          id?: string
+          interval?: number
+          is_active?: boolean
+          ledger_id?: string
+          materialize_cap_months?: number
+          name?: string
+          notes?: string | null
+          payment_method_id?: string | null
+          start_on?: string
+          timezone?: string
+          updated_at?: string
+          window_end_offset_days?: number
+          window_start_offset_days?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recurring_series_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recurring_series_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recurring_series_ledger_id_fkey"
+            columns: ["ledger_id"]
+            isOneToOne: false
+            referencedRelation: "ledgers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recurring_series_payment_method_id_fkey"
+            columns: ["payment_method_id"]
+            isOneToOne: false
+            referencedRelation: "payment_methods"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       transactions: {
         Row: {
           amount: number
@@ -443,6 +636,7 @@ export type Database = {
           occurred_on: string
           payment_method_id: string | null
           updated_at: string
+          updated_by: string | null
         }
         Insert: {
           amount: number
@@ -458,6 +652,7 @@ export type Database = {
           occurred_on: string
           payment_method_id?: string | null
           updated_at?: string
+          updated_by?: string | null
         }
         Update: {
           amount?: number
@@ -473,6 +668,7 @@ export type Database = {
           occurred_on?: string
           payment_method_id?: string | null
           updated_at?: string
+          updated_by?: string | null
         }
         Relationships: [
           {
@@ -574,11 +770,39 @@ export type Database = {
         Args: { p_ledger_id: string }
         Returns: string
       }
+      auto_post_due: {
+        Args: { p_ledger_id: string; p_now?: string }
+        Returns: number
+      }
       can_add_member: { Args: { l: string }; Returns: boolean }
       can_edit_ledger: { Args: { l: string; u: string }; Returns: boolean }
       can_edit_method: {
         Args: { p_method: string; u: string }
         Returns: boolean
+      }
+      category_expense_breakdown: {
+        Args: {
+          p_from: string
+          p_include_scheduled?: boolean
+          p_ledger_id: string
+          p_level?: string
+          p_to: string
+        }
+        Returns: {
+          amount_posted: number
+          amount_scheduled: number
+          amount_total: number
+          group_emoji: string
+          group_id: string
+          group_level: string
+          group_name: string
+          scheduled_count: number
+          tx_count: number
+        }[]
+      }
+      clamp_monthday: {
+        Args: { p_day: number; p_month: number; p_year: number }
+        Returns: string
       }
       create_ledger_from_purchase: {
         Args: { p_name?: string; p_purchase_id: string }
@@ -605,6 +829,24 @@ export type Database = {
           p_name: string
           p_owner_user_ids?: string[]
           p_type: Database["public"]["Enums"]["payment_method_type"]
+        }
+        Returns: string
+      }
+      create_recurring_series: {
+        Args: {
+          p_amount: number
+          p_auto_materialize?: boolean
+          p_auto_post?: boolean
+          p_backfill_post_mode?: Database["public"]["Enums"]["backfill_post_mode_enum"]
+          p_category_id: string
+          p_currency?: string
+          p_end_on?: string
+          p_ledger_id: string
+          p_monthday: number
+          p_name: string
+          p_notes?: string
+          p_payment_method_id?: string
+          p_start_on: string
         }
         Returns: string
       }
@@ -644,6 +886,10 @@ export type Database = {
       default_category_seed: { Args: never; Returns: Json }
       delete_transaction: { Args: { p_id: string }; Returns: undefined }
       effective_member_cap: { Args: { l: string }; Returns: number }
+      ensure_month_materialized: {
+        Args: { p_ledger_id: string; p_month: number; p_year: number }
+        Returns: undefined
+      }
       find_user_by_email_exact: {
         Args: { p_email: string }
         Returns: {
@@ -651,6 +897,10 @@ export type Database = {
           email: string
           user_id: string
         }[]
+      }
+      generate_occurrences: {
+        Args: { p_series_id: string; p_until: string }
+        Returns: undefined
       }
       get_ledger_members: {
         Args: { p_ledger_id: string }
@@ -673,6 +923,114 @@ export type Database = {
         Returns: boolean
       }
       is_owner: { Args: { l: string; u: string }; Returns: boolean }
+      list_month_activity: {
+        Args: {
+          p_include_scheduled?: boolean
+          p_include_skipped?: boolean
+          p_ledger_id: string
+          p_month: number
+          p_year: number
+        }
+        Returns: {
+          activity_kind: string
+          amount: number
+          category_id: string
+          category_name: string
+          flow_type: Database["public"]["Enums"]["flow_type_enum"]
+          memo: string
+          merchant: string
+          occurred_on: string
+          occurrence_id: string
+          occurrence_status: Database["public"]["Enums"]["occurrence_status_enum"]
+          payment_method_id: string
+          payment_method_name: string
+          series_id: string
+          transaction_id: string
+        }[]
+      }
+      list_month_activity_compatible: {
+        Args: {
+          p_from: string
+          p_include_scheduled?: boolean
+          p_include_skipped?: boolean
+          p_ledger_id: string
+          p_to: string
+        }
+        Returns: {
+          amount: number
+          amount_overridden: boolean
+          auto_post: boolean
+          base_amount: number
+          category_emoji: string
+          category_id: string
+          category_name: string
+          category_parent_id: string
+          category_parent_name: string
+          created_at: string
+          created_by: string
+          created_by_name: string
+          currency: string
+          flow_type: Database["public"]["Enums"]["flow_type_enum"]
+          id: string
+          memo: string
+          merchant: string
+          occurred_on: string
+          occurrence_id: string
+          occurrence_status: Database["public"]["Enums"]["occurrence_status_enum"]
+          payment_method_id: string
+          payment_method_name: string
+          recurring: boolean
+          recurring_series_id: string
+          recurring_series_name: string
+          resolved_amount: number
+          signed_amount: number
+          source: string
+        }[]
+      }
+      list_occurrences_month: {
+        Args: {
+          p_ledger_id: string
+          p_month: number
+          p_status?: Database["public"]["Enums"]["occurrence_status_enum"]
+          p_year: number
+        }
+        Returns: {
+          amount: number
+          category_id: string
+          category_name: string
+          id: string
+          payment_method_id: string
+          payment_method_name: string
+          resolved_amount: number
+          scheduled_on: string
+          series_id: string
+          series_name: string
+          status: Database["public"]["Enums"]["occurrence_status_enum"]
+          transaction_id: string
+        }[]
+      }
+      list_occurrences_month_auto: {
+        Args: {
+          p_ledger_id: string
+          p_month: number
+          p_status?: Database["public"]["Enums"]["occurrence_status_enum"]
+          p_year: number
+        }
+        Returns: {
+          amount: number
+          category_id: string
+          category_name: string
+          id: string
+          payment_method_id: string
+          payment_method_name: string
+          resolved_amount: number
+          scheduled_on: string
+          series_id: string
+          series_name: string
+          status: Database["public"]["Enums"]["occurrence_status_enum"]
+          transaction_id: string
+        }[]
+      }
       list_payment_methods: {
         Args: { p_ledger_id: string }
         Returns: {
@@ -687,6 +1045,48 @@ export type Database = {
           name: string
           owners: Json
           type: Database["public"]["Enums"]["payment_method_type"]
+        }[]
+      }
+      list_recurring_series: {
+        Args: {
+          p_ledger_id: string
+          p_limit?: number
+          p_month?: number
+          p_offset?: number
+          p_only_active?: boolean
+          p_search?: string
+          p_year?: number
+        }
+        Returns: {
+          amount: number
+          amount_max: number
+          amount_min: number
+          auto_post: boolean
+          auto_post_policy: string
+          category_emoji: string
+          category_id: string
+          category_name: string
+          created_at: string
+          created_by: string
+          created_by_name: string
+          currency: string
+          end_on: string
+          id: string
+          is_active: boolean
+          last_posted_on: string
+          month_posted_amount: number
+          month_posted_count: number
+          month_scheduled_count: number
+          month_skipped_count: number
+          monthday: number
+          name: string
+          next_scheduled_on: string
+          payment_method_id: string
+          payment_method_name: string
+          start_on: string
+          updated_at: string
+          window_end_offset_days: number
+          window_start_offset_days: number
         }[]
       }
       list_transactions: {
@@ -725,21 +1125,21 @@ export type Database = {
       member_count_unrestricted: { Args: { l: string }; Returns: number }
       method_ledger_id: { Args: { p_method: string }; Returns: string }
       month_kpis: {
-        Args: { p_ledger_id: string; p_month: number; p_year: number }
+        Args: {
+          p_from: string
+          p_include_scheduled?: boolean
+          p_ledger_id: string
+          p_to: string
+        }
         Returns: {
-          expense_delta: number
-          expense_prev: number
-          expense_rate: number
-          expense_total: number
-          income_delta: number
-          income_prev: number
-          income_total: number
-          month: string
-          net_signed: number
-          saving_delta: number
-          saving_prev: number
-          saving_rate: number
-          saving_total: number
+          days_in_period: number
+          expense: number
+          income: number
+          net: number
+          period_end: string
+          period_start: string
+          saving: number
+          tx_count: number
         }[]
       }
       my_pending_invites: {
@@ -754,6 +1154,7 @@ export type Database = {
           role: Database["public"]["Enums"]["member_role"]
         }[]
       }
+      post_occurrence: { Args: { p_occurrence_id: string }; Returns: string }
       seed_categories: {
         Args: { p_ledger_id: string; p_tree: Json }
         Returns: undefined
@@ -763,6 +1164,11 @@ export type Database = {
         Returns: undefined
       }
       share_any_ledger: { Args: { a: string; b: string }; Returns: boolean }
+      skip_occurrence: { Args: { p_occurrence_id: string }; Returns: undefined }
+      unpost_occurrence: {
+        Args: { p_occurrence_id: string }
+        Returns: undefined
+      }
       update_payment_method: {
         Args: {
           p_account_type?: string
@@ -775,6 +1181,29 @@ export type Database = {
           p_logo_url?: string
           p_method_id: string
           p_name?: string
+        }
+        Returns: undefined
+      }
+      update_recurring_series: {
+        Args: {
+          p_amount?: number
+          p_amount_max?: number
+          p_amount_min?: number
+          p_auto_materialize?: boolean
+          p_auto_post?: boolean
+          p_auto_post_policy?: string
+          p_backfill_post_mode?: Database["public"]["Enums"]["backfill_post_mode_enum"]
+          p_category_id?: string
+          p_currency?: string
+          p_end_on?: string
+          p_monthday?: number
+          p_name?: string
+          p_notes?: string
+          p_payment_method_id?: string
+          p_series_id: string
+          p_start_on?: string
+          p_window_end_offset_days?: number
+          p_window_start_offset_days?: number
         }
         Returns: undefined
       }
@@ -814,15 +1243,23 @@ export type Database = {
       }
     }
     Enums: {
+      anchor_policy_enum:
+        | "clamp_to_end"
+        | "skip"
+        | "move_prev_businessday"
+        | "move_next_businessday"
+      backfill_post_mode_enum: "none" | "past" | "past_and_today"
       flow_type_enum: "income" | "saving" | "expense"
       issuer_type_enum: "card" | "bank" | "point"
       member_role: "owner" | "editor"
+      occurrence_status_enum: "scheduled" | "posted" | "skipped" | "canceled"
       payment_method_type:
         | "credit_card"
         | "debit_card"
         | "bank_transfer"
         | "cash"
         | "points"
+      recurring_frequency_enum: "daily" | "weekly" | "monthly" | "yearly"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -950,9 +1387,17 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      anchor_policy_enum: [
+        "clamp_to_end",
+        "skip",
+        "move_prev_businessday",
+        "move_next_businessday",
+      ],
+      backfill_post_mode_enum: ["none", "past", "past_and_today"],
       flow_type_enum: ["income", "saving", "expense"],
       issuer_type_enum: ["card", "bank", "point"],
       member_role: ["owner", "editor"],
+      occurrence_status_enum: ["scheduled", "posted", "skipped", "canceled"],
       payment_method_type: [
         "credit_card",
         "debit_card",
@@ -960,6 +1405,7 @@ export const Constants = {
         "cash",
         "points",
       ],
+      recurring_frequency_enum: ["daily", "weekly", "monthly", "yearly"],
     },
   },
 } as const
