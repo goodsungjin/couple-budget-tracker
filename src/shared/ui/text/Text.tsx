@@ -6,16 +6,28 @@ interface Props {
   typography: keyof typeof vars.typography;
   color: keyof typeof vars.color;
   className?: string;
+  as?: 'p' | 'span' | 'label';
+  htmlFor?: string;
 }
 
-const Text = ({ children, typography, color, className }: Props) => {
+const Text = ({
+  children,
+  typography,
+  color,
+  className,
+  as = 'p',
+  htmlFor,
+}: Props) => {
+  const Component = as;
+
   return (
-    <p
+    <Component
       className={cn(vars.typography[typography], className)}
       style={{ color: vars.color[color] }}
+      htmlFor={htmlFor}
     >
       {children}
-    </p>
+    </Component>
   );
 };
 

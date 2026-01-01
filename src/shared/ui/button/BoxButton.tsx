@@ -7,6 +7,7 @@ interface Props extends BoxButtonVariants {
   onClick?: () => void;
   style?: 'fill' | 'outline';
   disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 const BoxButton = ({
@@ -14,6 +15,7 @@ const BoxButton = ({
   onClick,
   style = 'fill',
   disabled = false,
+  type = 'button',
   ...props
 }: Props & Omit<RecipeVariants<typeof css.fillButton>, 'variant'>) => {
   const buttonClass =
@@ -21,7 +23,7 @@ const BoxButton = ({
 
   return (
     <button
-      type="button"
+      type={type}
       className={buttonClass}
       onClick={onClick}
       disabled={disabled}

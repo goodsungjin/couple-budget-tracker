@@ -1,18 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useOutletContext } from 'react-router';
+import { useAutoPostOccurrences } from '@/entities/recurring-transaction/hooks/useAutoPostOccurrences';
 import { getListTransactionQueryOptions } from '@/entities/transactions/api/getListTransactionQueryOptions';
 import {
   useCreateTransaction,
   useDeleteTransaction,
   useUpdateTransaction,
 } from '@/entities/transactions/hooks/useCreateTransaction';
-import { transactionKeys } from '@/entities/transactions/lib/queryKeys';
 import { useCalendar } from '@/features/calendar/model/useCalendar';
 import { TransactionCalendarDays } from '@/features/transaction-calendar/ui/TransactionCalendarDays';
 import { TransactionCalendarMonthNavigator } from '@/features/transaction-calendar/ui/TransactionCalendarMonthNavigator';
 import { TransactionCreationFAB } from '@/features/transaction-creation/ui/TransactionCreationFAB';
-import { listMonthActivityCompatible } from '@/shared/apis/recurringTransaction';
 import { Flex } from '@/shared/ui/flex/Flex';
 import { Float } from '@/shared/ui/float/Float';
 import { OfflineIndicator } from '@/shared/ui/offline-indicator/OfflineIndicator';
@@ -20,8 +19,8 @@ import { useToast } from '@/shared/ui/toast/ToastProvider';
 import { TransitionRenderer } from '@/shared/ui/transition/TransitionRenderer';
 import type { TransactionInput } from '@/widgets/transaction/model/type';
 import { BatchTransactionOverlay } from '@/widgets/transaction/ui/BatchTransactionOverlay';
+import { TransactionFormOverlay } from '@/widgets/transaction/ui/TransactionFormOverlay';
 import { TransactionListView } from '@/widgets/transaction/ui/TransactionListView';
-import { TransactionOverlay } from '@/widgets/transaction/ui/TransactionOverlay';
 import * as css from './TransactionPage.css';
 
 const TransactionPage = () => {
@@ -35,6 +34,14 @@ const TransactionPage = () => {
 
   const { calendarData, navigatePrevious, navigateNext, state } = useCalendar();
   console.log('# calendarData', calendarData);
+
+  // 진입한 월에 고정지출이 있고 아직 트랜잭션으로 변하지 않았다면 자동으로 변환
+  useAutoPostOccurrences({
+    ledgerId,
+    year: state.currentDate.year(),
+    month: state.currentDate.month() + 1, // dayjs month는 0-based이므로 +1
+  });
+
   const { data: transactions } = useQuery({
     ...getListTransactionQueryOptions({
       ledgerId,
@@ -131,7 +138,43 @@ const TransactionPage = () => {
       </Flex>
 
       <TransitionRenderer isOpen={isOpen} animationType="fade">
-        <TransactionOverlay
+        <TransactionFormOverlay
+          ledgerId={ledgerId}
+          onSubmit={(transaction) => {
+            console.log('# transaction', transaction);
+            if (transaction.id) {
+              mutateUpdateTransaction({
+                p_id: transaction.id,
+                p_amount: transaction.amount,
+                p_category_id: transaction.categoryId,
+                p_flow_type: transaction.flowType,
+                p_memo: transaction.memo,
+                p_merchant: transaction.title,
+                p_occurred_on: transaction.date,
+                p_payment_method_id: transaction.paymentMethodId,
+                p_ledger_id: ledgerId,
+              });
+            } else {
+              mutateCreateTransaction({
+                p_amount: transaction.amount,
+                p_category_id: transaction.categoryId,
+                p_flow_type: transaction.flowType,
+                p_memo: transaction.memo,
+                p_merchant: transaction.title,
+                p_occurred_on: transaction.date,
+                p_payment_method_id: transaction.paymentMethodId || undefined,
+                p_ledger_id: ledgerId,
+              });
+            }
+          }}
+          onClose={() => setIsOpen(false)}
+          defaultTransactionInput={defaultTransactionInput ?? null}
+          onDelete={(id) => {
+            mutateDeleteTransaction(id);
+          }}
+        />
+
+        {/* <TransactionOverlay
           onDelete={(id) => {
             mutateDeleteTransaction(id);
           }}
@@ -164,7 +207,7 @@ const TransactionPage = () => {
               });
             }
           }}
-        />
+        /> */}
       </TransitionRenderer>
 
       <BatchTransactionOverlay

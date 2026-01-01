@@ -7,15 +7,20 @@ import { Flex } from '@/shared/ui/flex/Flex';
 interface Props {
   ledgerId: string;
   onAddFixedExpense: () => void;
+  onEditFixedExpense?: (seriesId: string) => void;
 }
-const SettingsFixedExpenseAllTab = ({ ledgerId, onAddFixedExpense }: Props) => {
+const SettingsFixedExpenseAllTab = ({
+  ledgerId,
+  onAddFixedExpense,
+  onEditFixedExpense,
+}: Props) => {
   const { data: recurringSeries } = useQuery({
     queryKey: ['recurringSeries', 'list', ledgerId],
     queryFn: () => listRecurringSeries({ ledgerId }),
   });
 
   return (
-    <Flex flex={1} gap="x6" direction="column">
+    <Flex flex={1} gap="x6" direction="column" height="100%">
       <AddButton onClick={onAddFixedExpense}>고정 내역 추가</AddButton>
 
       <SettingsSharedList
@@ -24,6 +29,7 @@ const SettingsFixedExpenseAllTab = ({ ledgerId, onAddFixedExpense }: Props) => {
           label: item.name,
           thumbnail: item.category_emoji,
         }))}
+        onClick={onEditFixedExpense}
       />
     </Flex>
   );

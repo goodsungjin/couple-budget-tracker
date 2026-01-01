@@ -166,21 +166,18 @@ const BatchTransactionOverlay = ({ ledgerId, isOpen, onClose }: Props) => {
                     </button>
                   )}
                 </Flex>
-
                 <InputAmount
                   amount={transaction.amount}
                   onChange={(amount) =>
                     updateTransaction(index, 'amount', amount)
                   }
                 />
-
                 <RadioGroupCategory
                   selectedFlowType={transaction.flowType}
                   onChange={(flowType) =>
                     updateTransaction(index, 'flowType', flowType)
                   }
                 />
-
                 <TransactionLabel
                   label="날짜"
                   value={transaction.date}
@@ -197,7 +194,7 @@ const BatchTransactionOverlay = ({ ledgerId, isOpen, onClose }: Props) => {
                     />
                   )}
                 />
-
+                F
                 <TransactionLabel
                   label="카테고리"
                   value={transaction.category}
@@ -215,14 +212,12 @@ const BatchTransactionOverlay = ({ ledgerId, isOpen, onClose }: Props) => {
                     />
                   )}
                 />
-
                 <TransactionLabel
                   label="거래처"
                   value={transaction.title}
                   placeholder="거래처 이름을 입력하세요"
                   onChange={(title) => updateTransaction(index, 'title', title)}
                 />
-
                 <TransactionLabel
                   label="메모"
                   value={transaction.memo}

@@ -1396,6 +1396,11 @@ react-dom@^19.1.1:
   dependencies:
     scheduler "^0.26.0"
 
+react-hook-form@^7.68.0:
+  version "7.68.0"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.68.0.tgz#733c6871fa4ec5e5bfb13e7650a3a912eafe1721"
+  integrity sha512-oNN3fjrZ/Xo40SWlHf1yCjlMK417JxoSJVUXQjGdvdRCU07NTFei1i1f8ApUAts+IVh14e4EdakeLEA+BEAs/Q==
+
 react-is@^19.2.0:
   version "19.2.0"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-19.2.0.tgz#ddc3b4a4e0f3336c3847f18b806506388d7b9973"

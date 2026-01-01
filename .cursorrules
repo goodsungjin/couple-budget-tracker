@@ -1,0 +1,130 @@
+# Weolbu 프로젝트 코딩 원칙
+
+## 아키텍처 원칙
+
+### Feature Sliced Design (FSD) 준수
+- 이 프로젝트는 **Feature Sliced Design (FSD)** 아키텍처 패턴을 엄격히 따릅니다.
+- 슬라이스 계층 구조를 준수하세요:
+  - `app/` - 앱 초기화, 라우팅, 프로바이더 (최상위)
+  - `pages/` - 페이지 컴포넌트
+  - `widgets/` - 복합 UI 블록
+  - `features/` - 비즈니스 기능
+  - `entities/` - 비즈니스 엔티티
+  - `shared/` - 재사용 가능한 코드 (최하위)
+- **의존성 규칙**: 상위 계층은 하위 계층에만 의존할 수 있습니다. (app → pages → widgets → features → entities → shared)
+- 같은 계층 간의 의존성은 금지됩니다.
+
+## 파일 및 폴더 네이밍 컨벤션
+
+### 폴더 네이밍
+- **케밥케이스(kebab-case)**를 사용합니다.
+- 예: `create-course`, `user-profile`, `auth-provider`
+
+### 파일 네이밍
+- **TSX 파일 (React 컴포넌트)**: **파스칼케이스(PascalCase)**를 사용합니다.
+  - 예: `LoginPage.tsx`, `QueryProvider.tsx`, `UserCard.tsx`
+- **TS 파일 (유틸리티, 훅, 타입 등)**: **카멜케이스(camelCase)**를 사용합니다.
+  - 예: `useAuth.ts`, `auth.ts`, `queryClient.ts`, `apiClient.ts`
+- **CSS 파일 (Vanilla Extract)**: **카멜케이스(camelCase)**를 사용합니다.
+  - 예: `loginPage.css.ts`, `userCard.css.ts`
+- **기타 설정 파일**: 프로젝트 표준에 따릅니다.
+
+## 베럴파일 패턴 금지
+
+### 절대 사용하지 말 것
+- **베럴파일(barrel file) 패턴을 사용하지 마세요.**
+- `index.ts` 또는 `index.tsx` 파일을 export만을 위해 생성하지 마세요.
+- 모든 import는 **직접 경로**를 사용해야 합니다.
+
+### 올바른 예시
+```typescript
+// ✅ 올바른 방법: 직접 import
+import { LoginPage } from '@/pages/login/LoginPage';
+import { useAuth } from '@/features/auth/model/useAuth';
+import { apiClient } from '@/shared/lib/axios';
+```
+
+### 잘못된 예시
+```typescript
+// ❌ 잘못된 방법: 베럴파일을 통한 간접 import
+import { LoginPage } from '@/pages/login';
+import { useAuth } from '@/features/auth/model';
+import { apiClient } from '@/shared/lib';
+```
+
+### 이유
+- FSD 원칙: 명시적 의존성 관리가 중요합니다.
+- 의존성 추적: 직접 import는 의존성 관계를 명확하게 보여줍니다.
+- 트리 쉐이킹: 번들러가 사용하지 않는 코드를 더 잘 제거할 수 있습니다.
+- 순환 참조 방지: 베럴파일은 순환 참조를 유발할 수 있습니다.
+
+## 코드 작성 프로세스
+
+### 계획 수립 우선 원칙
+- **코드를 바로 작성하지 마세요.**
+- 모든 변경 작업 전에 다음을 수행해야 합니다:
+  1. **현재 상태 분석**: 관련 파일과 구조를 먼저 파악하세요.
+  2. **계획 수립**: 변경할 파일 목록과 변경 내용을 명확히 정리하세요.
+  3. **근거 설명**: 각 변경사항에 대한 명확한 이유와 근거를 설명하세요.
+  4. **승인 요청**: 사용자에게 계획을 제시하고 승인을 받은 후 진행하세요.
+
+### 계획 수립 시 포함할 내용
+- 변경할 파일 목록
+- 각 파일의 변경 이유
+- FSD 원칙 준수 여부
+- 네이밍 컨벤션 준수 여부
+- 베럴파일 사용 여부 확인
+
+## Import 경로 규칙
+
+### Path Alias 사용
+- 프로젝트의 path alias를 사용하세요:
+  - `@/app/*` → `./src/app/*`
+  - `@/pages/*` → `./src/pages/*`
+  - `@/widgets/*` → `./src/widgets/*`
+  - `@/features/*` → `./src/features/*`
+  - `@/entities/*` → `./src/entities/*`
+  - `@/shared/*` → `./src/shared/*`
+
+### Import 예시
+```typescript
+// ✅ 올바른 방법
+import { LoginPage } from '@/pages/login/LoginPage';
+import { useAuth } from '@/features/auth/model/useAuth';
+import { apiClient } from '@/shared/lib/axios';
+import { authStorage } from '@/shared/lib/auth';
+```
+
+## 코드 검증 체크리스트
+
+코드를 작성하거나 수정할 때 다음을 확인하세요:
+
+- [ ] FSD 계층 구조를 준수했는가?
+- [ ] 폴더명이 케밥케이스인가?
+- [ ] TSX 파일명이 파스칼케이스인가?
+- [ ] TS 파일명이 카멜케이스인가?
+- [ ] CSS 파일명이 카멜케이스인가?
+- [ ] 베럴파일을 사용하지 않았는가?
+- [ ] 모든 import가 직접 경로를 사용하는가?
+- [ ] 계획을 먼저 수립하고 설명했는가?
+
+## 예외 사항
+
+### 설정 파일
+- `vite.config.ts`, `tsconfig.json` 등 설정 파일은 프로젝트 표준을 따릅니다.
+- 라이브러리에서 요구하는 네이밍은 예외로 허용됩니다.
+
+## 기술 스택
+
+이 프로젝트는 다음 기술을 사용합니다:
+- Vite
+- TypeScript
+- React
+- Vanilla Extract (CSS-in-JS)
+- Biome (린터/포맷터)
+- Axios
+- TanStack Query
+- TanStack Router
+
+각 기술의 모범 사례를 따르되, 위 원칙을 우선시하세요.
+
