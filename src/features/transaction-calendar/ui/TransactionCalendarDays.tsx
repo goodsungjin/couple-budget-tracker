@@ -53,7 +53,12 @@ const TransactionCalendarDays = ({
   }, [calendarData.days]);
 
   return (
-    <Flex className={css.base} direction="column" width="890px" height="680px">
+    <Flex
+      className={css.base}
+      direction="column"
+      // minWidth="890px"
+      height="680px"
+    >
       {weeks.map((week) => (
         <Flex
           flex={1}

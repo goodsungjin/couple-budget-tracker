@@ -45,6 +45,13 @@ export const day = recipe({
 
 export const navigationButton = style([vars.reset.button]);
 
+export const dashboardContainer = style({
+  overflowY: 'auto',
+  overflowX: 'hidden',
+  width: '100%',
+  padding: '16px 0',
+});
+
 export const chartContainer = style({
   width: '100%',
   maxWidth: '800px',

@@ -8,6 +8,8 @@ export const base = style([
 
 export const body = style([
   {
-    overflow: 'hidden',
+    overflowX: 'auto',
+    overflowY: 'hidden',
+    minWidth: 0,
   },
 ]);

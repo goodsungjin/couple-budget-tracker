@@ -41,7 +41,7 @@ const RadioGroup = <T extends string>({
     <RadioGroupContext.Provider
       value={{
         value: currentValue,
-        onChange: () => handleChange,
+        onChange: (value) => handleChange(value as T),
         name,
       }}
     >

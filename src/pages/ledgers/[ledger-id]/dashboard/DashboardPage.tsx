@@ -1,13 +1,12 @@
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { useOutletContext } from 'react-router';
 import {
   Bar,
   BarChart,
   CartesianGrid,
   Cell,
-  ComposedChart,
   Legend,
-  Line,
   Pie,
   PieChart,
   ResponsiveContainer,
@@ -23,7 +22,9 @@ import { Flex } from '@/shared/ui/flex/Flex';
 import { IconChevronLeft } from '@/shared/ui/icon/IconChevronLeft';
 import { IconChevronRight } from '@/shared/ui/icon/IconChevronRight';
 import { Text } from '@/shared/ui/text/Text';
+import { CategoryDetailDialog } from './CategoryDetailDialog';
 import * as css from './DashboardPage.css';
+import { FixedExpenseList } from './FixedExpenseList';
 
 const DashboardPage = () => {
   const { ledgerId } = useOutletContext<{ ledgerId: string }>();
@@ -34,6 +35,11 @@ const DashboardPage = () => {
     .add(1, 'month')
     .startOf('month')
     .format('YYYY-MM-DD');
+
+  const [selectedCategory, setSelectedCategory] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
 
   const { data: monthKPI } = useSuspenseQuery(
     getMonthKPIQueryOptions(ledgerId, from, to, true)
@@ -69,7 +75,19 @@ const DashboardPage = () => {
     dataCategoryExpenseBreakdown?.map((item: CategoryExpenseItem) => ({
       name: item.group_name || '기타',
       value: Number(item.amount_total || 0),
+      categoryId: item.group_id,
+      categoryName: item.group_name || '기타',
     })) || [];
+
+  const handleChartClick = (data: {
+    categoryId: string;
+    categoryName: string;
+  }) => {
+    setSelectedCategory({
+      id: data.categoryId,
+      name: data.categoryName,
+    });
+  };
 
   // 차트 색상 팔레트
   const CHART_COLORS = [
@@ -86,7 +104,7 @@ const DashboardPage = () => {
 
   // 금액 포맷팅 함수
   const formatCurrency = (value: number) => {
-    return value.toLocaleString();
+    return value?.toLocaleString();
   };
 
   // KPI 요약 데이터
@@ -116,8 +134,9 @@ const DashboardPage = () => {
       direction="column"
       gap="x4"
       alignItems="center"
-      justifyContent="center"
+      justifyContent="start"
       flex={1}
+      className={css.dashboardContainer}
     >
       <Flex alignItems="center" gap="x4">
         <button
@@ -178,6 +197,16 @@ const DashboardPage = () => {
                   outerRadius={100}
                   fill="#8884d8"
                   dataKey="value"
+                  onClick={(_, index) => {
+                    const clickedData = chartData[index];
+                    if (clickedData) {
+                      handleChartClick({
+                        categoryId: clickedData.categoryId,
+                        categoryName: clickedData.categoryName,
+                      });
+                    }
+                  }}
+                  style={{ cursor: 'pointer' }}
                 >
                   {chartData.map((item, index) => (
                     <Cell
@@ -218,11 +247,48 @@ const DashboardPage = () => {
                     borderRadius: '8px',
                   }}
                 />
-                <Bar dataKey="value" fill={vars.color.primary40} />
+                <Bar
+                  dataKey="value"
+                  fill={vars.color.primary40}
+                  onClick={(data: unknown, index: number) => {
+                    if (
+                      typeof data === 'object' &&
+                      data !== null &&
+                      index !== undefined
+                    ) {
+                      const clickedData = chartData[index];
+                      if (clickedData) {
+                        handleChartClick({
+                          categoryId: clickedData.categoryId,
+                          categoryName: clickedData.categoryName,
+                        });
+                      }
+                    }
+                  }}
+                  style={{ cursor: 'pointer' }}
+                />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </Flex>
+      )}
+
+      <FixedExpenseList
+        ledgerId={ledgerId}
+        year={state.currentDate.year()}
+        month={state.currentDate.month() + 1}
+      />
+
+      {selectedCategory && (
+        <CategoryDetailDialog
+          isOpen={!!selectedCategory}
+          onClose={() => setSelectedCategory(null)}
+          ledgerId={ledgerId}
+          categoryId={selectedCategory.id}
+          categoryName={selectedCategory.name}
+          from={from}
+          to={to}
+        />
       )}
     </Flex>
   );

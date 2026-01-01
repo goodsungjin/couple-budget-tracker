@@ -4,6 +4,8 @@ import { vars } from '@/shared/lib/vanilla-extract';
 
 export const base = style({
   position: 'relative',
+  minWidth: '890px',
+  height: '680px',
 });
 
 export const week = style({

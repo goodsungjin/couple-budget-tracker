@@ -133,7 +133,12 @@ const TransactionPage = () => {
         </Flex>
 
         <Float placement="bottom-right" offsetY="-60px" offsetX="-40px">
-          <TransactionCreationFAB onClick={() => setIsOpen(true)} />
+          <TransactionCreationFAB
+            onClick={() => {
+              setDefaultTransactionInput(null);
+              setIsOpen(true);
+            }}
+          />
         </Float>
       </Flex>
 
@@ -151,7 +156,9 @@ const TransactionPage = () => {
                 p_memo: transaction.memo,
                 p_merchant: transaction.title,
                 p_occurred_on: transaction.date,
-                p_payment_method_id: transaction.paymentMethodId,
+                p_payment_method_id: transaction.paymentMethodId?.trim()
+                  ? transaction.paymentMethodId
+                  : undefined,
                 p_ledger_id: ledgerId,
               });
             } else {
@@ -162,7 +169,9 @@ const TransactionPage = () => {
                 p_memo: transaction.memo,
                 p_merchant: transaction.title,
                 p_occurred_on: transaction.date,
-                p_payment_method_id: transaction.paymentMethodId || undefined,
+                p_payment_method_id: transaction.paymentMethodId?.trim()
+                  ? transaction.paymentMethodId
+                  : undefined,
                 p_ledger_id: ledgerId,
               });
             }
