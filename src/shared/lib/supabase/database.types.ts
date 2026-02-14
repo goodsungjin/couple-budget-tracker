@@ -1121,6 +1121,36 @@ export type Database = {
           signed_amount: number
         }[]
       }
+      list_transactions_by_parent_category: {
+        Args: {
+          p_flow?: Database["public"]["Enums"]["flow_type_enum"]
+          p_from?: string
+          p_ledger_id: string
+          p_parent_category_id: string
+          p_to?: string
+        }
+        Returns: {
+          amount: number
+          category_emoji: string
+          category_id: string
+          category_name: string
+          category_parent_id: string
+          category_parent_name: string
+          created_at: string
+          created_by: string
+          created_by_name: string
+          currency: string
+          flow_type: Database["public"]["Enums"]["flow_type_enum"]
+          id: string
+          ledger_id: string
+          memo: string
+          merchant: string
+          occurred_on: string
+          payment_method_id: string
+          payment_method_name: string
+          signed_amount: number
+        }[]
+      }
       max_regular_ledgers_for_user: { Args: { u: string }; Returns: number }
       member_count_unrestricted: { Args: { l: string }; Returns: number }
       method_ledger_id: { Args: { p_method: string }; Returns: string }

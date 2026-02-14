@@ -5,6 +5,7 @@ export const dialogContent = style({
   width: '90vw',
   maxWidth: '600px',
   maxHeight: '80vh',
+  height: '80vh',
   backgroundColor: vars.color.gray0,
   borderRadius: '16px',
   padding: '24px',
@@ -36,5 +37,17 @@ export const listContainer = style({
   flex: 1,
   overflowY: 'auto',
   minHeight: 0,
+  overflowX: 'hidden',
 });
 
+export const contentWrapper = style({
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100%',
+  minHeight: 0,
+  gap: '16px',
+});
+
+export const headerWrapper = style({
+  flexShrink: 0,
+});

@@ -39,6 +39,7 @@ const DashboardPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<{
     id: string;
     name: string;
+    level: string;
   } | null>(null);
 
   const { data: monthKPI } = useSuspenseQuery(
@@ -72,20 +73,31 @@ const DashboardPage = () => {
   };
 
   const chartData =
-    dataCategoryExpenseBreakdown?.map((item: CategoryExpenseItem) => ({
-      name: item.group_name || '기타',
-      value: Number(item.amount_total || 0),
-      categoryId: item.group_id,
-      categoryName: item.group_name || '기타',
-    })) || [];
+    dataCategoryExpenseBreakdown?.map((item: CategoryExpenseItem) => {
+      console.log('# chartData item:', {
+        group_id: item.group_id,
+        group_name: item.group_name,
+        group_level: item.group_level,
+        tx_count: item.tx_count,
+      });
+      return {
+        name: item.group_name || '기타',
+        value: Number(item.amount_total || 0),
+        categoryId: item.group_id,
+        categoryName: item.group_name || '기타',
+        categoryLevel: item.group_level,
+      };
+    }) || [];
 
   const handleChartClick = (data: {
     categoryId: string;
     categoryName: string;
+    categoryLevel?: string;
   }) => {
     setSelectedCategory({
       id: data.categoryId,
       name: data.categoryName,
+      level: data.categoryLevel || 'leaf',
     });
   };
 
@@ -203,6 +215,7 @@ const DashboardPage = () => {
                       handleChartClick({
                         categoryId: clickedData.categoryId,
                         categoryName: clickedData.categoryName,
+                        categoryLevel: clickedData.categoryLevel,
                       });
                     }
                   }}
@@ -261,6 +274,7 @@ const DashboardPage = () => {
                         handleChartClick({
                           categoryId: clickedData.categoryId,
                           categoryName: clickedData.categoryName,
+                          categoryLevel: clickedData.categoryLevel,
                         });
                       }
                     }
@@ -286,6 +300,7 @@ const DashboardPage = () => {
           ledgerId={ledgerId}
           categoryId={selectedCategory.id}
           categoryName={selectedCategory.name}
+          categoryLevel={selectedCategory.level}
           from={from}
           to={to}
         />

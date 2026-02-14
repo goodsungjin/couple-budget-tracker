@@ -54,10 +54,19 @@ const FixedExpenseList = ({ ledgerId, year, month }: Props) => {
           ...occ,
           category_emoji: category?.emoji || '💰',
           flow_type: flowType,
+          // resolved_amount가 있으면 사용, 없으면 amount 사용
+          displayAmount: occ.resolved_amount ?? occ.amount ?? 0,
         };
       })
       .filter((occ) => occ.flow_type === 'expense');
   }, [occurrences, categories, categoryMap]);
+
+  // 합계 금액 계산
+  const totalAmount = useMemo(() => {
+    return expenseOccurrences.reduce((sum, occ) => {
+      return sum + (occ.displayAmount ?? 0);
+    }, 0);
+  }, [expenseOccurrences]);
 
   if (isLoadingOccurrences || isLoadingCategories) {
     return null;
@@ -73,9 +82,14 @@ const FixedExpenseList = ({ ledgerId, year, month }: Props) => {
 
   return (
     <Flex direction="column" gap="x4" className={css.container}>
-      <Text typography="h2" color="gray90">
-        고정 지출
-      </Text>
+      <Flex alignItems="center" justifyContent="between">
+        <Text typography="h2" color="gray90">
+          고정 지출
+        </Text>
+        <Text typography="subHeading1Bold" color="gray90">
+          합계: {totalAmount.toLocaleString()}원
+        </Text>
+      </Flex>
       <div className={css.grid}>
         {expenseOccurrences.map((occurrence) => {
           const isPosted = occurrence.status === 'posted';
@@ -109,7 +123,7 @@ const FixedExpenseList = ({ ledgerId, year, month }: Props) => {
                     typography="subHeading2Bold"
                     color={isPosted ? 'gray90' : 'gray60'}
                   >
-                    {occurrence.amount?.toLocaleString()}원
+                    {occurrence.displayAmount?.toLocaleString() ?? '0'}원
                   </Text>
                 </Flex>
 
